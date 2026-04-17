@@ -1,12 +1,12 @@
+using TiendaUCN.src.Domain.Models;
+
 namespace TiendaUCN.src.Application.Services.Interfaces
 {
-    /// <summary>
-    /// Interfaz provisional para el servicio de tokens.
-    /// TODO: Definir los métodos según los requerimientos del proyecto.
-    /// </summary>
     public interface ITokenService
     {
-        Task<string> GenerateTokenAsync(int userId);
-        Task<bool> ValidateTokenAsync(string token);
+        string GenerateToken(User user, string roleName);
+        Task AddToBlacklistAsync(string token);
+        Task<bool> IsTokenBlacklistedAsync(string token);
+        Task<int> DeleteExpiredTokensInBlacklistAsync();
     }
 }

@@ -1,29 +1,36 @@
+using Microsoft.EntityFrameworkCore;
+using TiendaUCN.src.Domain.Models;
+using TiendaUCN.src.Infrastructure.Data;
 using TiendaUCN.src.Infrastructure.Repositories.Interfaces;
 
 namespace TiendaUCN.src.Infrastructure.Repositories.Implements
 {
-    /// <summary>
-    /// Implementación provisional del repositorio de tokens.
-    /// TODO: Implementar persistencia real de tokens (base de datos, cache, etc.).
-    /// </summary>
     public class TokenRepository : ITokenRepository
     {
-        public Task SaveTokenAsync(int userId, string token)
+        private readonly DataContext _context;
+        public TokenRepository(DataContext context)
         {
-            // TODO: Implementar persistencia real
-            return Task.CompletedTask;
+            _context = context;
         }
 
-        public Task<bool> IsTokenValidAsync(string token)
+        public async Task AddAsync(BlacklistedToken token)
         {
-            // TODO: Implementar validación real
-            return Task.FromResult(!string.IsNullOrEmpty(token));
+            await _context.BlacklistedTokens.AddAsync(token);
+            await _context.SaveChangesAsync();
         }
 
-        public Task RevokeTokenAsync(string token)
+        public async Task<bool> IsBlacklistedAsync(string tokenId)
         {
-            // TODO: Implementar revocación real
-            return Task.CompletedTask;
+            return await _context.BlacklistedTokens.AnyAsync(u => u.TokenId == tokenId);
+        }
+
+        public async Task<int> DeleteExpiredTokensAsync()
+        {
+            // Elimina los tokens que han expirado, sin soft delete
+            var now = DateTime.UtcNow;
+            return await _context.BlacklistedTokens
+                .Where(t => t.ExpireAt < now)
+                .ExecuteDeleteAsync();
         }
     }
 }
