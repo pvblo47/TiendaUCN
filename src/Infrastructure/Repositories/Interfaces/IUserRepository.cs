@@ -2,17 +2,15 @@ using TiendaUCN.src.Domain.Models;
 
 namespace TiendaUCN.src.Infrastructure.Repositories.Interfaces
 {
-    /// <summary>
-    /// Interfaz provisional para el repositorio de usuarios.
-    /// TODO: Definir los métodos según los requerimientos del proyecto.
-    /// </summary>
     public interface IUserRepository
     {
-        Task<User?> GetByIdAsync(int id);
+        Task<bool> ExistsByNameAsync(string name);
+        Task<bool> ExistsByEmailAsync(string email);
+        Task<bool> ExistsByRutAsync(string rut);
+        Task<bool> ExistsByPhoneNumberAsync(string phoneNumber);
+        Task CreateAsync(User user);
         Task<User?> GetByEmailAsync(string email);
-        Task<IEnumerable<User>> GetAllAsync();
-        Task AddAsync(User user);
-        Task UpdateAsync(User user);
-        Task DeleteAsync(int id);
+        Task<bool> MarkEmailAsVerifiedAsync(int id);
+        Task<int> DeleteUnconfirmedUsersAsync(int daysToDeleteUnverifiedAccount);
     }
 }
