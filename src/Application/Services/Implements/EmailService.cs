@@ -34,7 +34,7 @@ namespace TiendaUCN.src.Application.Services.Implements
                 To = email,
                 Subject = _configuration["EmailConfiguration:WelcomeSubject"] ?? throw new ArgumentNullException("El asunto del correo de bienvenida no está configurado"),
                 From = _configuration["EmailConfiguration:From"] ?? throw new ArgumentNullException("La configuración del 'From' no puede ser nula"),
-                HtmlBody = "<h1>Bienvenido a Tienda UCN</h1><p>Gracias por registrarte en Tienda UCN</p>"
+                HtmlBody = "<p style= 'font-size: 24px; font-weight: bold;'>¡Tu cuenta ha sido verificada exitosamente!</p>"
             };
 
             await _resend.EmailSendAsync(message);
