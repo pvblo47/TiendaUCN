@@ -401,6 +401,11 @@ FodyWeavers.xsd
 # Local History for Visual Studio Code
 .history/
 
+# Local development tooling caches
+.dotnet-cli/
+.dotnet_home/
+.postman/
+
 # Windows Installer files from build outputs
 *.cab
 *.msi
