@@ -3,6 +3,14 @@
 ##
 ## Get latest from `dotnet new gitignore`
 
+# Appsettings files
+appsettings.json
+
+# Base de datos
+*.db
+*.db-shm
+*.db-wal
+
 # dotenv files
 .env
 
@@ -392,6 +400,11 @@ FodyWeavers.xsd
 
 # Local History for Visual Studio Code
 .history/
+
+# Local development tooling caches
+.dotnet-cli/
+.dotnet_home/
+.postman/
 
 # Windows Installer files from build outputs
 *.cab
