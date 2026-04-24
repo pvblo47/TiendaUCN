@@ -39,4 +39,4 @@ Este proyecto utiliza un stack moderno y actualizado para asegurar rendimiento, 
    dotnet run
    ```
 
-Una vez levantado el servidor (normalmente en `http://localhost:5000` o donde se especifique en los logs), podrás interactuar con la API a través de las rutas expuestas o la especificación de OpenAPI.
+Una vez levantado el servidor (normalmente en `http://localhost:5090` o donde se especifique en los logs), podrás interactuar con la API a través de las rutas expuestas o la especificación de OpenAPI.

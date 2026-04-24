@@ -6,6 +6,7 @@ namespace TiendaUCN.src.API.Middlewares
 {
     public class BlacklistMiddleware(RequestDelegate next)
     {
+        // Punto de entrada del Middleware. Recibe el siguiente delegado en la cadena de solicitud.
         private readonly RequestDelegate _next = next;
 
         public async Task InvokeAsync(HttpContext context)

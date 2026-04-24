@@ -3,8 +3,8 @@ using Serilog;
 using TiendaUCN.src.Application.DTOs.AuthDTO;
 using TiendaUCN.src.Application.Services.Interfaces;
 using TiendaUCN.src.Domain.Models;
-using TiendaUCN.src.Infrastructure.Repositories.Interfaces;
 using TiendaUCN.src.Infrastructure.Repositories.Implements;
+using TiendaUCN.src.Infrastructure.Repositories.Interfaces;
 
 namespace TiendaUCN.src.Application.Services.Implements
 {
@@ -16,7 +16,7 @@ namespace TiendaUCN.src.Application.Services.Implements
         private readonly IConfiguration _configuration;
         private readonly ITokenService _tokenService;
         private readonly int _verificationCodeExpiry;
-        private readonly int _maxFailedEmailVerificationAttempts;
+        private readonly int _maxFailedEmailVerificationAttempts = 3;
         private readonly int _waitingTimeInMinutesAfterResendEmail;
         private readonly int _daysToDeleteUnverifiedAccount;
 
@@ -181,14 +181,52 @@ namespace TiendaUCN.src.Application.Services.Implements
             return await Task.FromResult((verificationCode, verificationCodeExpiry));
         }
 
-        public Task<string> LoginAsync(LoginDTO loginDTO)
+        public async Task<string> LogoutAsync(string token)
         {
-            throw new NotImplementedException();
+            // Validar que se haya proporcionado un token
+            if (string.IsNullOrEmpty(token))
+            {
+                Log.Warning("Intento de logout fallido: Token no proporcionado");
+                throw new ArgumentException("Token es requerido para el logout.");
+            }
+
+            // Agregar el token a la blacklist
+            await _tokenService.AddToBlacklistAsync(token);
+
+            Log.Information($"Token JWT agregado a la blacklist: {token}");
+            return "Logout exitoso.";
         }
 
-        public Task<string> LogoutAsync(string token)
+        public async Task<string> LoginAsync(LoginDTO loginDTO)
         {
-            throw new NotImplementedException();
+            // obtener el usuario por correo electrónico
+            User user = await _userRepository.GetByEmailAsync(loginDTO.Email)
+            ?? throw new KeyNotFoundException("Credenciales invalidas");
+
+            // Validar la contraseña
+            if (!BCrypt.Net.BCrypt.Verify(loginDTO.Password, user.PasswordHash))
+            {
+
+                Log.Warning($"Intento de inicio de sesión fallido: Contraseña incorrecta para el usuario {loginDTO.Email}");
+                throw new InvalidOperationException("Credenciales invalidas.");
+
+            }
+
+            // Validar si el correo electrónico está verificado
+            if (!user.EmailConfirmed)
+            {
+
+                Log.Warning($"Intento de inicio de sesión fallido: Correo electrónico no verificado para el usuario {loginDTO.Email}");
+                throw new InvalidOperationException("Credenciales invalidas. Por favor, verifica tu correo electrónico antes de iniciar sesión.");
+            }
+
+            // Generar token JWT
+            string token = _tokenService.GenerateToken(user, user.Role.Name);
+            Log.Information($"Token JWT generado para el usuario: {token}");
+
+            return token;
         }
+
+
     }
 }

@@ -1,19 +1,19 @@
-using Microsoft.EntityFrameworkCore;
+using DotNetEnv;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
-using Microsoft.IdentityModel.Tokens;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
-using System.Text;
-using Serilog;
+using Microsoft.IdentityModel.Tokens;
 using Resend;
-using TiendaUCN.src.Infrastructure.Data;
-using TiendaUCN.src.Application.Services.Interfaces;
-using TiendaUCN.src.Application.Services.Implements;
-using TiendaUCN.src.Infrastructure.Repositories.Interfaces;
-using TiendaUCN.src.Infrastructure.Repositories.Implements;
+using Serilog;
+using System.Text;
 using TiendaUCN.src.API.Middlewares;
-using DotNetEnv;
 using TiendaUCN.src.Application.Mappers;
+using TiendaUCN.src.Application.Services.Implements;
+using TiendaUCN.src.Application.Services.Interfaces;
+using TiendaUCN.src.Infrastructure.Data;
+using TiendaUCN.src.Infrastructure.Repositories.Implements;
+using TiendaUCN.src.Infrastructure.Repositories.Interfaces;
 
 Env.Load();
 
@@ -26,6 +26,7 @@ builder.Services.AddControllers();
 builder.Services.AddScoped<UserMapper>();
 
 //Configuracion de servicios y repositorios
+builder.Services.AddScoped<IVerificationCodeRepository, VerificationCodeRepository>();
 builder.Services.AddScoped<IUserService, UserService>();
 builder.Services.AddScoped<IUserRepository, UserRepository>();
 builder.Services.AddScoped<IEmailService, EmailService>();
@@ -95,10 +96,10 @@ using (var scope = app.Services.CreateScope())
 }
 #endregion
 
-app.UseMiddleware<ExceptionHandlingMiddleware>(); // 1 - valida el JWT
-app.UseMiddleware<BlacklistMiddleware>(); // 2 - verifica blacklist
-app.UseAuthentication(); // 3 - verifica roles y permisos
-app.UseAuthorization();
+app.UseMiddleware<ExceptionHandlingMiddleware>(); // 1 - maneja excepciones
+app.UseAuthentication(); // 2 - valida el JWT
+app.UseMiddleware<BlacklistMiddleware>(); // 3 - verifica blacklist
+app.UseAuthorization(); // 4 - verifica roles y permisos
 app.MapOpenApi();
 app.MapControllers();
 app.Run();

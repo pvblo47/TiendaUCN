@@ -11,7 +11,7 @@ namespace TiendaUCN.src.Application.Validators
                 // Eliminar puntos y espacios del RUT
                 string rut = (string)value;
 
-                rut = rut.Replace(".", "").Replace("", "");
+                rut = rut.Replace(".", "").Replace(" ", "");
 
                 // Obtenemos el número y el dígito verificador
                 int rutNumber = int.Parse(rut.Split('-')[0]);
