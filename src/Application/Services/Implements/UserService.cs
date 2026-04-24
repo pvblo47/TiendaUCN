@@ -16,7 +16,7 @@ namespace TiendaUCN.src.Application.Services.Implements
         private readonly IConfiguration _configuration;
         private readonly ITokenService _tokenService;
         private readonly int _verificationCodeExpiry;
-        private readonly int _maxFailedEmailVerificationAttempts = 3;
+        private readonly int _maxFailedEmailVerificationAttempts;
         private readonly int _waitingTimeInMinutesAfterResendEmail;
         private readonly int _daysToDeleteUnverifiedAccount;
 
@@ -185,10 +185,9 @@ namespace TiendaUCN.src.Application.Services.Implements
         {
             // Validar que se haya proporcionado un token
             if (string.IsNullOrEmpty(token))
-            {
+
                 Log.Warning("Intento de logout fallido: Token no proporcionado");
-                throw new ArgumentException("Token es requerido para el logout.");
-            }
+            throw new ArgumentException("Token es requerido para el logout.");
 
             // Agregar el token a la blacklist
             await _tokenService.AddToBlacklistAsync(token);
@@ -227,6 +226,11 @@ namespace TiendaUCN.src.Application.Services.Implements
             return token;
         }
 
-
+        public async Task<int> DeleteUnconfirmedUsersAsync()
+        {
+            int deletedUsers = await _userRepository.DeleteUnconfirmedUsersAsync(_daysToDeleteUnverifiedAccount);
+            Log.Information($"Usuarios no confirmados eliminados exitosamente. Cantidad: {deletedUsers}");
+            return deletedUsers;
+        }
     }
 }

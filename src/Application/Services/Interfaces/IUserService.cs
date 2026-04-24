@@ -1,5 +1,5 @@
-using TiendaUCN.src.Domain.Models;
 using TiendaUCN.src.Application.DTOs.AuthDTO;
+using TiendaUCN.src.Domain.Models;
 
 namespace TiendaUCN.src.Application.Services.Interfaces
 {
@@ -9,5 +9,6 @@ namespace TiendaUCN.src.Application.Services.Interfaces
         Task EmailVerificationAsync(EmailVerificationDTO emailVerificationDTO);
         Task<string> LoginAsync(LoginDTO loginDTO);
         Task<string> LogoutAsync(string token);
+        Task<int> DeleteUnconfirmedUsersAsync();
     }
 }

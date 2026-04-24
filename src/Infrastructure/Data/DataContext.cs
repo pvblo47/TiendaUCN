@@ -13,6 +13,8 @@ namespace TiendaUCN.src.Infrastructure.Data
         public DbSet<User> Users { get; set; } = null!;
         public DbSet<Role> Roles { get; set; } = null!;
         public DbSet<VerificationCode> VerificationCodes { get; set; } = null!;
+
+        public DbSet<Image> Images { get; set; } = null!;
         /*
         public DbSet<Product> Products { get; set; } = null!;
         public DbSet<Image> Images { get; set; } = null!;
