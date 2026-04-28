@@ -232,5 +232,48 @@ namespace TiendaUCN.src.Application.Services.Implements
             Log.Information($"Usuarios no confirmados eliminados exitosamente. Cantidad: {deletedUsers}");
             return deletedUsers;
         }
+
+        public async Task<string> ResendVerificationCodeAsync(ResendVerificationCodeDTO resendVerificationCodeDTO)
+        {
+            // Obtener el usuario por correo electrónico
+            User? user = await _userRepository.GetByEmailAsync(resendVerificationCodeDTO.Email)
+                ?? throw new KeyNotFoundException($"No se encontró un usuario con el correo proporcionado: {resendVerificationCodeDTO.Email}");
+
+            // Validar si el correo electrónico ya está verificado
+            if (user.EmailConfirmed)
+            {
+                Log.Warning($"Intento de reenvío de código de verificación fallido: El correo electrónico ya está verificado para el usuario {user.Email}");
+                throw new InvalidOperationException($"El correo electrónico {user.Email} ya está verificado.");
+            }
+
+            // Validar si el usuario puede solicitar un nuevo código de verificación
+            if (user.VerificationCode.DateToResend > DateTime.UtcNow)
+            {
+                var minutesToWait = (user.VerificationCode.DateToResend - DateTime.UtcNow).TotalMinutes;
+                Log.Warning($"Intento de reenvío de código de verificación fallido: El usuario {user.Email} debe esperar {minutesToWait} minutos antes de solicitar un nuevo código");
+                throw new InvalidOperationException($"Debes esperar {Math.Ceiling(minutesToWait)} minutos antes de solicitar un nuevo código de verificación.");
+            }
+
+            // Generar y enviar un nuevo código de verificación
+            var (verificationCode, verificationCodeExpiry) = await GenerateCodeAndExpiryAsync();
+            var isUpdated = await _verificationCodeRepository.UpdateAsync(user.VerificationCode.Id, verificationCode, verificationCodeExpiry);
+            if (!isUpdated)
+            {
+                Log.Error($"Error al actualizar el código de verificación para el usuario {user.Email}");
+                throw new InvalidOperationException("Error al actualizar el código de verificación.");
+            }
+
+            var newDateToResend = DateTime.UtcNow.AddMinutes(_waitingTimeInMinutesAfterResendEmail);
+            var isDateToResendUpdated = await _verificationCodeRepository.UpdateDateToResendAsync(user.VerificationCode.Id, newDateToResend);
+            if (!isDateToResendUpdated)
+            {
+                Log.Error($"Error al actualizar la fecha para reenviar un nuevo código de verificación para el usuario {user.Email}");
+                throw new InvalidOperationException("Error al actualizar la fecha para reenviar un nuevo código de verificación.");
+            }
+
+            await _emailService.SendVerificationCodeEmailAsync(user.Email, verificationCode);
+
+            return $"El código expirará en {_verificationCodeExpiry} minutos. Puedes solicitar un nuevo código después de {_waitingTimeInMinutesAfterResendEmail} minutos.";
+        }
     }
 }

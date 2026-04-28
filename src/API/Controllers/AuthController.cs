@@ -39,8 +39,15 @@ namespace TiendaUCN.src.API.Controllers
             return Ok(new GenericResponse<string>("Login exitoso", token));
         }
 
+        [HttpPost("resend-verification-code")]
+        public async Task<IActionResult> ResendVerificationCode([FromBody] ResendVerificationCodeDTO resendVerificationCodeDTO)
+        {
+            var message = await _userService.ResendVerificationCodeAsync(resendVerificationCodeDTO);
+            return Ok(new GenericResponse<string>("Código de verificación reenviado exitosamente", message));
+        }
+
         [HttpPost("logout")]
-        [Authorize(Roles ="Customer,Admin")]
+        [Authorize(Roles = "Customer,Admin")]
         public async Task<IActionResult> Logout()
         {
             var token = Request.Headers["Authorization"].ToString().Replace("Bearer ", string.Empty);
