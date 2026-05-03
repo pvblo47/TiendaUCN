@@ -11,8 +11,18 @@ namespace TiendaUCN.src.Application.Mappers
             TypeAdapterConfig.GlobalSettings.Default.IgnoreNullValues(true);
 
             // Configuración de mapeos específicos
+
+            //Configuracion de mapeo para usuarios
             var userMapper = serviceProvider.GetRequiredService<UserMapper>();
             userMapper.ConfigureAllMappings();
+
+            //Configuracion de mapeo para productos
+            var productMapper = serviceProvider.GetRequiredService<ProductMapper>();
+            productMapper.ConfigureAllMappings();
+
+            //Configuracion de mapeo para carritos
+            var cartMapper = serviceProvider.GetRequiredService<CartMapper>();
+            cartMapper.ConfigureAllMappings();
         }
     }
 }
