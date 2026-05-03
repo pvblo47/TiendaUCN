@@ -29,6 +29,8 @@ builder.Services.AddControllers();
 
 //Configuracion de mapeadores
 builder.Services.AddScoped<UserMapper>();
+builder.Services.AddScoped<ProductMapper>();
+builder.Services.AddScoped<CartMapper>();
 
 //Configuracion de servicios y repositorios
 builder.Services.AddScoped<IVerificationCodeRepository, VerificationCodeRepository>();
@@ -36,9 +38,17 @@ builder.Services.AddScoped<IUserService, UserService>();
 builder.Services.AddScoped<IUserRepository, UserRepository>();
 builder.Services.AddScoped<IEmailService, EmailService>();
 builder.Services.AddScoped<ITokenService, TokenService>();
+builder.Services.AddScoped<ITokenRepository, TokenRepository>();
 builder.Services.AddScoped<IImageService, ImageService>();
 builder.Services.AddScoped<IImageRepository, ImageRepository>();
-builder.Services.AddScoped<ITokenRepository, TokenRepository>();
+builder.Services.AddScoped<IProductService, ProductService>();
+builder.Services.AddScoped<IProductRepository, ProductRepository>();
+builder.Services.AddScoped<IBrandService, BrandService>();
+builder.Services.AddScoped<IBrandRepository, BrandRepository>();
+builder.Services.AddScoped<ICategoryService, CategoryService>();
+builder.Services.AddScoped<ICategoryRepository, CategoryRepository>();
+builder.Services.AddScoped<ICartService, CartService>();
+builder.Services.AddScoped<ICartRepository, CartRepository>();
 
 // Configuración de trabajos en segundo plano
 builder.Services.AddScoped<IUserJob, UserJob>();
@@ -125,8 +135,8 @@ app.UseHangfireDashboard(builder.Configuration["HangfireDashboard:DashboardPath"
 #endregion
 
 
-#region Database Migration
-Serilog.Log.Information("Aplicando migraciones a la base de datos");
+#region Database Seeding and Mapster Configuration
+Serilog.Log.Information("Aplicando migraciones a la base de datos y configuracion de Mapster");
 using (var scope = app.Services.CreateScope())
 {
     await DataSeeder.Initialize(scope.ServiceProvider);
@@ -166,9 +176,10 @@ Serilog.Log.Information($"Job recurrente '{jobId}' configurado con cron: {cronEx
 #endregion
 
 app.UseMiddleware<ExceptionHandlingMiddleware>(); // 1 - maneja excepciones
-app.UseAuthentication(); // 2 - valida el JWT
-app.UseMiddleware<BlacklistMiddleware>(); // 3 - verifica blacklist
-app.UseAuthorization(); // 4 - verifica roles y permisos
+app.UseMiddleware<CartMiddleware>(); // 2 - maneja las cookies del carrito para usuarios anonimos
+app.UseAuthentication(); // 3 - valida el JWT
+app.UseMiddleware<BlacklistMiddleware>(); // 4 - verifica blacklist
+app.UseAuthorization(); // 5 - verifica roles y permisos
 app.MapOpenApi();
 app.MapControllers();
 app.Run();
