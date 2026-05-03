@@ -4,7 +4,7 @@ namespace TiendaUCN.src.Application.Validators
 {
     public class RutValidationAttribute : ValidationAttribute
     {
-        protected override ValidationResult IsValid(object? value, ValidationContext validationContext)
+        protected override ValidationResult? IsValid(object? value, ValidationContext validationContext)
         {
             if (value != null)
             {
