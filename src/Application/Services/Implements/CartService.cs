@@ -93,11 +93,9 @@ namespace TiendaUCN.src.Application.Services.Implements
 
         public async Task<CartDTO> AddCartItemAsync(string buyerId, AddChangeCartItemDTO addCartItemDTO, int? userId = null)
         {
-            // Inicializar el carrito como null
-            Cart? cart = null;
-
-            // Obtener el carrito actual
-            cart = await GetCartAsync(buyerId, userId);
+            // Crear u obtener el carrito actual para permitir el primer agregado sin una llamada previa a GET /api/cart
+            await CreateOrGetCartAsync(buyerId, userId);
+            var cart = await GetCartAsync(buyerId, userId);
 
             // Obtener el producto
             var product = await _productRepository.GetProductByIdForCustomerAsync(addCartItemDTO.ProductId);

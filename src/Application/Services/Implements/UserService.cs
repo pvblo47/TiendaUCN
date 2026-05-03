@@ -185,9 +185,10 @@ namespace TiendaUCN.src.Application.Services.Implements
         {
             // Validar que se haya proporcionado un token
             if (string.IsNullOrEmpty(token))
-
+            {
                 Log.Warning("Intento de logout fallido: Token no proporcionado");
-            throw new ArgumentException("Token es requerido para el logout.");
+                throw new ArgumentException("Token es requerido para el logout.");
+            }
 
             // Agregar el token a la blacklist
             await _tokenService.AddToBlacklistAsync(token);
