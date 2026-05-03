@@ -495,3 +495,6 @@ $RECYCLE.BIN/
 
 # Vim temporary swap files
 *.swp
+
+# Local development notes
+DEV_NOTES.md
