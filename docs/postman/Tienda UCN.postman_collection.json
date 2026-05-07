@@ -1,0 +1,195 @@
+{
+  "info": {
+    "_postman_id": "6d94aa32-2203-4d29-a555-b35f9f2d2de7",
+    "name": "Tienda UCN",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "_exporter_id": "53408856",
+    "_collection_link": "https://go.postman.co/collection/53408856-6d94aa32-2203-4d29-a555-b35f9f2d2de7?source=collection_link"
+  },
+  "item": [
+    {
+      "name": "Authentication",
+      "item": [
+        {
+          "name": "Register",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n    \"Name\": \"Pablo Bravo\",\r\n    \"Email\": \"pablo.bravo02@alumnos.ucn.cl\",\r\n    \"Rut\": \"22000478-3\",\r\n    \"PhoneNumber\": \"+569 63504437\",\r\n    \"BirthDate\": \"2005-02-14\",\r\n    \"Gender\": \"Masculino\",\r\n    \"Password\": \"Hola1234*\",\r\n    \"ConfirmPassword\": \"Hola1234*\"\r\n    \r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{baseUrl}}auth/register",
+              "host": [
+                "{{baseUrl}}auth"
+              ],
+              "path": [
+                "register"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Email Verification",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n\r\n    \"Email\": \"pablo.bravo02@alumnos.ucn.cl\",\r\n    \"VerificationCode\": \"252526\"\r\n\r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{baseUrl}}auth/email-verification",
+              "host": [
+                "{{baseUrl}}auth"
+              ],
+              "path": [
+                "email-verification"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Logout",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{token}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "POST",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}auth/logout",
+              "host": [
+                "{{baseUrl}}auth"
+              ],
+              "path": [
+                "logout"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Login",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "var response = pm.response. json();\r",
+                  "if (pm.response.code === 200 && response.data !== null && response.data !== undefined) {\r",
+                  "    pm.collectionVariables.set(\"token\", response.data);\r",
+                  "}"
+                ],
+                "type": "text/javascript",
+                "packages": {},
+                "requests": {}
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n\r\n    \"Email\": \"pablo.bravo02@alumnos.ucn.cl\",\r\n    \"Password\": \"Hola1234*\"\r\n\r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{baseUrl}}auth/login",
+              "host": [
+                "{{baseUrl}}auth"
+              ],
+              "path": [
+                "login"
+              ]
+            }
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Product Management",
+      "item": []
+    },
+    {
+      "name": "Cart",
+      "item": [
+        {
+          "name": "GetCart",
+          "request": {
+            "method": "GET",
+            "header": []
+          },
+          "response": []
+        },
+        {
+          "name": "AddCartItem",
+          "request": {
+            "method": "POST",
+            "header": []
+          },
+          "response": []
+        },
+        {
+          "name": "UpdateItemQuantity",
+          "request": {
+            "method": "PATCH",
+            "header": [],
+            "url": {
+              "raw": ""
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "RemoveItem",
+          "request": {
+            "method": "DELETE",
+            "header": []
+          },
+          "response": []
+        },
+        {
+          "name": "ClearCart",
+          "request": {
+            "method": "PUT",
+            "header": []
+          },
+          "response": []
+        }
+      ]
+    }
+  ],
+  "variable": [
+    {
+      "key": "token",
+      "value": ""
+    }
+  ]
+}

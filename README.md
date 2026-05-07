@@ -26,6 +26,12 @@ Este proyecto utiliza un stack moderno y actualizado para asegurar rendimiento, 
 - **Resend**: Integración para el envío sencillo y moderno de correos electrónicos.
 - **DotNetEnv**: Carga automática de variables de entorno desde el archivo `.env`.
 
+## 📋 Pre-requisitos
+
+Antes de comenzar, asegúrate de tener instalado lo siguiente en tu sistema:
+- [.NET 9.0 SDK](https://dotnet.microsoft.com/es-es/download/dotnet/9.0) (o superior).
+- [Postman](https://www.postman.com/downloads/) (Recomendado para probar los endpoints).
+
 ## ⚙️ Configuración y Puesta en Marcha
 
 1. **Variables de entorno**: Copia o renombra el archivo `.env.example` a `.env` en la raíz del proyecto y rellena las variables de entorno necesarias (conexiones, secretos, api keys, etc.).
@@ -40,3 +46,14 @@ Este proyecto utiliza un stack moderno y actualizado para asegurar rendimiento, 
    ```
 
 Una vez levantado el servidor (normalmente en `http://localhost:5090` o donde se especifique en los logs), podrás interactuar con la API a través de las rutas expuestas o la especificación de OpenAPI.
+
+## 🧪 Pruebas con Postman
+
+Para probar la funcionalidad de los endpoints, puedes utilizar **Postman**:
+
+1. Abre la aplicación de Postman.
+2. Si tienes un archivo de colección exportado (`.json`), impórtalo yendo a `Import` > `Upload Files`.
+3. Asegúrate de que las variables de entorno en Postman (como la URL base) apunten a tu servidor local (ej. `http://localhost:5090`).
+4. **Autenticación**: Muchos endpoints están protegidos. Primero debes enviar una solicitud al endpoint de **Login** para obtener un Token JWT.
+5. Copia el Token obtenido, ve a la pestaña **Authorization** de la solicitud que deseas probar (o en la configuración global de la colección), selecciona el tipo **Bearer Token** y pega tu token ahí.
+6. ¡Ya estás listo para enviar solicitudes y probar la API!
