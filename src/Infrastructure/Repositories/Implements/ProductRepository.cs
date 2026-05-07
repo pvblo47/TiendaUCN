@@ -200,5 +200,20 @@ namespace TiendaUCN.src.Infrastructure.Repositories.Implements
                     .SetProperty(p => p.CategoryId, product.CategoryId)
                     .SetProperty(p => p.BrandId, product.BrandId)) > 0;
         }
+
+        /// <summary>
+        /// Actualiza el stock de un producto por su ID.
+        /// </summary>
+        /// <param name="productId">El ID del producto</param>
+        /// <param name="newStock">El nuevo stock</param>
+        /// <returns>true si lo actualiza, false si no</returns>
+        public async Task<bool> UpdateStockAsync(int productId, int newStock)
+        {
+            return await _context.Products
+                .Where(p => p.Id == productId && p.IsDeleted == false)
+                .ExecuteUpdateAsync(p =>
+                    p.SetProperty(p => p.Stock, newStock)) > 0;
+        }
+
     }
 }

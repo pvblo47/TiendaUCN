@@ -78,7 +78,7 @@ namespace TiendaUCN.src.Application.Services.Implements
             }
 
             // Mappea el token a un modelo de blacklist
-            var blacklistedToken = new BlacklistedToken
+            var blacklistedToken = new BlackListedToken
             {
                 TokenId = jti,
                 ExpireAt = expireAt

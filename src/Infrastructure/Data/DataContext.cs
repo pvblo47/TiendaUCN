@@ -22,11 +22,9 @@ namespace TiendaUCN.src.Infrastructure.Data
         public DbSet<Category> Categories { get; set; } = null!;
         public DbSet<Cart> Carts { get; set; } = null!;
         public DbSet<CartItem> CartItems { get; set; } = null!;
-        /*
         public DbSet<Order> Orders { get; set; } = null!;
         public DbSet<OrderItem> OrderItems { get; set; } = null!;
-        */
 
-        public DbSet<BlacklistedToken> BlacklistedTokens { get; set; } = null!;
+        public DbSet<BlackListedToken> BlacklistedTokens { get; set; } = null!;
     }
 }

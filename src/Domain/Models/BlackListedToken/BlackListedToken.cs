@@ -1,6 +1,6 @@
 namespace TiendaUCN.src.Domain.Models
 {
-    public class BlacklistedToken
+    public class BlackListedToken
     {
         public int Id { get; set; }
         public required string TokenId { get; set; }
