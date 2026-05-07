@@ -52,8 +52,9 @@ Una vez levantado el servidor (normalmente en `http://localhost:5090` o donde se
 Para probar la funcionalidad de los endpoints, puedes utilizar **Postman**:
 
 1. Abre la aplicación de Postman.
-2. Si tienes un archivo de colección exportado (`.json`), impórtalo yendo a `Import` > `Upload Files`.
-3. Asegúrate de que las variables de entorno en Postman (como la URL base) apunten a tu servidor local (ej. `http://localhost:5090`).
-4. **Autenticación**: Muchos endpoints están protegidos. Primero debes enviar una solicitud al endpoint de **Login** para obtener un Token JWT.
-5. Copia el Token obtenido, ve a la pestaña **Authorization** de la solicitud que deseas probar (o en la configuración global de la colección), selecciona el tipo **Bearer Token** y pega tu token ahí.
-6. ¡Ya estás listo para enviar solicitudes y probar la API!
+2. Los archivos necesarios se encuentran en el directorio `docs/postman` del proyecto.
+3. Importa la Colección y el Entorno yendo a `Import` > `Upload Files` (o arrastrando los archivos de `docs/postman`).
+4. Selecciona el Entorno importado en la esquina superior derecha de Postman (esto configurará la `baseUrl` automáticamente, ej. `http://localhost:5090`).
+5. **Autenticación**: Muchos endpoints están protegidos. Primero debes enviar una solicitud al endpoint de **Login** para obtener un Token JWT.
+6. Copia el Token obtenido, ve a la pestaña **Authorization** de la solicitud que deseas probar (o en la configuración global de la colección), selecciona el tipo **Bearer Token** y pega tu token ahí.
+7. ¡Ya estás listo para enviar solicitudes y probar la API!
