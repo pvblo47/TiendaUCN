@@ -4,7 +4,7 @@ namespace TiendaUCN.src.Infrastructure.Repositories.Interfaces
 {
     public interface ITokenRepository
     {
-        Task AddAsync(BlacklistedToken token);
+        Task AddAsync(BlackListedToken token);
         Task<bool> IsBlacklistedAsync(string tokenId);
         Task<int> DeleteExpiredTokensAsync();
     }

@@ -4,14 +4,14 @@ namespace TiendaUCN.src.Application.Validators
 {
     public class RutValidationAttribute : ValidationAttribute
     {
-        protected override ValidationResult IsValid(object? value, ValidationContext validationContext)
+        protected override ValidationResult? IsValid(object? value, ValidationContext validationContext)
         {
             if (value != null)
             {
                 // Eliminar puntos y espacios del RUT
                 string rut = (string)value;
 
-                rut = rut.Replace(".", "").Replace("", "");
+                rut = rut.Replace(".", "").Replace(" ", "");
 
                 // Obtenemos el número y el dígito verificador
                 int rutNumber = int.Parse(rut.Split('-')[0]);

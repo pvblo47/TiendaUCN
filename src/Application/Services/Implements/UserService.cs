@@ -3,8 +3,8 @@ using Serilog;
 using TiendaUCN.src.Application.DTOs.AuthDTO;
 using TiendaUCN.src.Application.Services.Interfaces;
 using TiendaUCN.src.Domain.Models;
-using TiendaUCN.src.Infrastructure.Repositories.Interfaces;
 using TiendaUCN.src.Infrastructure.Repositories.Implements;
+using TiendaUCN.src.Infrastructure.Repositories.Interfaces;
 
 namespace TiendaUCN.src.Application.Services.Implements
 {
@@ -181,14 +181,100 @@ namespace TiendaUCN.src.Application.Services.Implements
             return await Task.FromResult((verificationCode, verificationCodeExpiry));
         }
 
-        public Task<string> LoginAsync(LoginDTO loginDTO)
+        public async Task<string> LogoutAsync(string token)
         {
-            throw new NotImplementedException();
+            // Validar que se haya proporcionado un token
+            if (string.IsNullOrEmpty(token))
+            {
+                Log.Warning("Intento de logout fallido: Token no proporcionado");
+                throw new ArgumentException("Token es requerido para el logout.");
+            }
+
+            // Agregar el token a la blacklist
+            await _tokenService.AddToBlacklistAsync(token);
+
+            Log.Information($"Token JWT agregado a la blacklist: {token}");
+            return "Logout exitoso.";
         }
 
-        public Task<string> LogoutAsync(string token)
+        public async Task<string> LoginAsync(LoginDTO loginDTO)
         {
-            throw new NotImplementedException();
+            // obtener el usuario por correo electrónico
+            User user = await _userRepository.GetByEmailAsync(loginDTO.Email)
+            ?? throw new KeyNotFoundException("Credenciales invalidas");
+
+            // Validar la contraseña
+            if (!BCrypt.Net.BCrypt.Verify(loginDTO.Password, user.PasswordHash))
+            {
+
+                Log.Warning($"Intento de inicio de sesión fallido: Contraseña incorrecta para el usuario {loginDTO.Email}");
+                throw new InvalidOperationException("Credenciales invalidas.");
+
+            }
+
+            // Validar si el correo electrónico está verificado
+            if (!user.EmailConfirmed)
+            {
+
+                Log.Warning($"Intento de inicio de sesión fallido: Correo electrónico no verificado para el usuario {loginDTO.Email}");
+                throw new InvalidOperationException("Credenciales invalidas. Por favor, verifica tu correo electrónico antes de iniciar sesión.");
+            }
+
+            // Generar token JWT
+            string token = _tokenService.GenerateToken(user, user.Role.Name);
+            Log.Information($"Token JWT generado para el usuario: {token}");
+
+            return token;
+        }
+
+        public async Task<int> DeleteUnconfirmedUsersAsync()
+        {
+            int deletedUsers = await _userRepository.DeleteUnconfirmedUsersAsync(_daysToDeleteUnverifiedAccount);
+            Log.Information($"Usuarios no confirmados eliminados exitosamente. Cantidad: {deletedUsers}");
+            return deletedUsers;
+        }
+
+        public async Task<string> ResendVerificationCodeAsync(ResendVerificationCodeDTO resendVerificationCodeDTO)
+        {
+            // Obtener el usuario por correo electrónico
+            User? user = await _userRepository.GetByEmailAsync(resendVerificationCodeDTO.Email)
+                ?? throw new KeyNotFoundException($"No se encontró un usuario con el correo proporcionado: {resendVerificationCodeDTO.Email}");
+
+            // Validar si el correo electrónico ya está verificado
+            if (user.EmailConfirmed)
+            {
+                Log.Warning($"Intento de reenvío de código de verificación fallido: El correo electrónico ya está verificado para el usuario {user.Email}");
+                throw new InvalidOperationException($"El correo electrónico {user.Email} ya está verificado.");
+            }
+
+            // Validar si el usuario puede solicitar un nuevo código de verificación
+            if (user.VerificationCode.DateToResend > DateTime.UtcNow)
+            {
+                var minutesToWait = (user.VerificationCode.DateToResend - DateTime.UtcNow).TotalMinutes;
+                Log.Warning($"Intento de reenvío de código de verificación fallido: El usuario {user.Email} debe esperar {minutesToWait} minutos antes de solicitar un nuevo código");
+                throw new InvalidOperationException($"Debes esperar {Math.Ceiling(minutesToWait)} minutos antes de solicitar un nuevo código de verificación.");
+            }
+
+            // Generar y enviar un nuevo código de verificación
+            var (verificationCode, verificationCodeExpiry) = await GenerateCodeAndExpiryAsync();
+            var isUpdated = await _verificationCodeRepository.UpdateAsync(user.VerificationCode.Id, verificationCode, verificationCodeExpiry);
+            if (!isUpdated)
+            {
+                Log.Error($"Error al actualizar el código de verificación para el usuario {user.Email}");
+                throw new InvalidOperationException("Error al actualizar el código de verificación.");
+            }
+
+            var newDateToResend = DateTime.UtcNow.AddMinutes(_waitingTimeInMinutesAfterResendEmail);
+            var isDateToResendUpdated = await _verificationCodeRepository.UpdateDateToResendAsync(user.VerificationCode.Id, newDateToResend);
+            if (!isDateToResendUpdated)
+            {
+                Log.Error($"Error al actualizar la fecha para reenviar un nuevo código de verificación para el usuario {user.Email}");
+                throw new InvalidOperationException("Error al actualizar la fecha para reenviar un nuevo código de verificación.");
+            }
+
+            await _emailService.SendVerificationCodeEmailAsync(user.Email, verificationCode);
+
+            return $"El código expirará en {_verificationCodeExpiry} minutos. Puedes solicitar un nuevo código después de {_waitingTimeInMinutesAfterResendEmail} minutos.";
         }
     }
 }

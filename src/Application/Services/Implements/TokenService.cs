@@ -64,7 +64,7 @@ namespace TiendaUCN.src.Application.Services.Implements
             var tokenHandler = new JwtSecurityTokenHandler();
             var jwtToken = tokenHandler.ReadJwtToken(token);
 
-            // Extrae el jti qeu representa el ID único del token y la fecha de expiración
+            // Extrae el jti que representa el ID único del token y la fecha de expiración
             var jti = jwtToken.Claims.FirstOrDefault(c => c.Type == JwtRegisteredClaimNames.Jti)?.Value
                 ?? throw new InvalidOperationException("El token no contiene un jti válido para agregar a la blacklist");
             var expireAt = jwtToken.ValidTo;
@@ -78,7 +78,7 @@ namespace TiendaUCN.src.Application.Services.Implements
             }
 
             // Mappea el token a un modelo de blacklist
-            var blacklistedToken = new BlacklistedToken
+            var blacklistedToken = new BlackListedToken
             {
                 TokenId = jti,
                 ExpireAt = expireAt

@@ -32,7 +32,7 @@ namespace TiendaUCN.src.Infrastructure.Data
                 }
 
                 // Creacion de categorias
-                /*
+
                 if (!await context.Categories.AnyAsync())
                 {
                     var categories = new List<Category>
@@ -63,7 +63,7 @@ namespace TiendaUCN.src.Infrastructure.Data
                     await context.SaveChangesAsync();
                     Log.Information("Marcas creadas con exito");
                 }
-                */
+
                 // Creacion de usuarios
                 if (!await context.Users.AnyAsync())
                 {
@@ -109,7 +109,7 @@ namespace TiendaUCN.src.Infrastructure.Data
                 }
 
                 // Creacion de productos e imagenes
-                /*
+
                 if (!await context.Products.AnyAsync())
                 {
                     var categoryIds = await context.Categories.Select(c => c.Id).ToListAsync();
@@ -133,11 +133,12 @@ namespace TiendaUCN.src.Infrastructure.Data
                     await context.SaveChangesAsync();
                     Log.Information("Productos de prueba e imagenes creados con exito");
                 }
-                */
+
             }
             catch (Exception ex)
             {
                 Log.Error(ex, "Error al aplicar migraciones a la base de datos", ex.Message);
+                throw;
             }
         }
 

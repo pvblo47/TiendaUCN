@@ -13,7 +13,7 @@ namespace TiendaUCN.src.Infrastructure.Repositories.Implements
             _context = context;
         }
 
-        public async Task AddAsync(BlacklistedToken token)
+        public async Task AddAsync(BlackListedToken token)
         {
             await _context.BlacklistedTokens.AddAsync(token);
             await _context.SaveChangesAsync();

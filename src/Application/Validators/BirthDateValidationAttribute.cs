@@ -6,7 +6,12 @@ namespace TiendaUCN.src.Application.Validators
     {
         protected override ValidationResult? IsValid(object? value, ValidationContext validationContext)
         {
-            string valueString = value.ToString()!;
+            if (value == null)
+            {
+                return new ValidationResult("La fecha de nacimiento es requerida.");
+            }
+
+            string valueString = value.ToString() ?? string.Empty;
 
             if (!DateTime.TryParse(valueString, out DateTime date))
             {
