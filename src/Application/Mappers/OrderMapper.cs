@@ -62,7 +62,7 @@ namespace TiendaUCN.src.Application.Mappers
         }
 
         /// <summary>
-        /// Configura el mapeo de los items de las órdenes de compra.
+        /// Configura el mapeo de los items de las órdenes de compra. Se adptan de CartItem a OrderItem.
         /// </summary>
         private void ConfigureOrderItemsMappings()
         {

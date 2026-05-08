@@ -5,15 +5,26 @@ using TiendaUCN.src.Domain.Models;
 
 namespace TiendaUCN.src.Infrastructure.Data
 {
-    public static class DataSeeder
+    /// <summary>
+    /// Clase DataSeeder que se encarga de inicializar la base de datos con datos de prueba.
+    /// </summary>
+    public class DataSeeder
     {
+        /// <summary>
+        /// Método estático que inicializa la base de datos con datos de prueba.
+        /// </summary>
+        /// <param name="serviceProvider">Proveedor de servicios</param>
+        /// <returns></returns>
+        /// <exception cref="InvalidOperationException"></exception>
         public static async Task Initialize(IServiceProvider serviceProvider)
         {
             try
             {
-                var context = serviceProvider.GetRequiredService<DataContext>();
-                var configuration = serviceProvider.GetRequiredService<IConfiguration>();
-                await context.Database.MigrateAsync();
+                using var scope = serviceProvider.CreateScope();
+                var context = scope.ServiceProvider.GetRequiredService<DataContext>();
+                var configuration = scope.ServiceProvider.GetRequiredService<IConfiguration>();
+                await context.Database.EnsureCreatedAsync(); // Asegura que la base de datos se cree si no existe
+                await context.Database.MigrateAsync(); // Aplica las migraciones pendientes a la base de datos
 
                 // Extraer géneros de usuario desde la configuración
                 var genders = configuration.GetSection("User:Genders").Get<string[]>() ?? throw new InvalidOperationException("No se pudieron cargar los géneros de usuario");
@@ -32,16 +43,15 @@ namespace TiendaUCN.src.Infrastructure.Data
                 }
 
                 // Creacion de categorias
-
                 if (!await context.Categories.AnyAsync())
                 {
                     var categories = new List<Category>
                         {
-                            new Category { Name = "Electronica" },
-                            new Category { Name = "Ropa" },
-                            new Category { Name = "Hogar" },
-                            new Category { Name = "Juguetes" },
-                            new Category { Name = "Libros" }
+                            new Category { Name = "Electronica", Description = "Dispositivos electrónicos y gadgets" },
+                            new Category { Name = "Ropa", Description = "Indumentaria y moda para todas las edades" },
+                            new Category { Name = "Hogar", Description = "Artículos para la decoración y uso doméstico" },
+                            new Category { Name = "Juguetes", Description = "Diversión para niños y coleccionistas" },
+                            new Category { Name = "Libros", Description = "Literatura, textos académicos y más" }
                         };
                     await context.Categories.AddRangeAsync(categories);
                     await context.SaveChangesAsync();
@@ -53,11 +63,11 @@ namespace TiendaUCN.src.Infrastructure.Data
                 {
                     var brands = new List<Brand>
                         {
-                            new Brand { Name = "Apple" },
-                            new Brand { Name = "Nike" },
-                            new Brand { Name = "Samsung" },
-                            new Brand { Name = "Adidas" },
-                            new Brand { Name = "Sony" }
+                            new Brand { Name = "Apple", Description = "Empresa tecnológica estadounidense" },
+                            new Brand { Name = "Nike", Description = "Ropa y calzado deportivo" },
+                            new Brand { Name = "Samsung", Description = "Multinacional surcoreana de tecnología" },
+                            new Brand { Name = "Adidas", Description = "Marca deportiva alemana" },
+                            new Brand { Name = "Sony", Description = "Entretenimiento y tecnología japonesa" }
                         };
                     await context.Brands.AddRangeAsync(brands);
                     await context.SaveChangesAsync();
@@ -109,7 +119,6 @@ namespace TiendaUCN.src.Infrastructure.Data
                 }
 
                 // Creacion de productos e imagenes
-
                 if (!await context.Products.AnyAsync())
                 {
                     var categoryIds = await context.Categories.Select(c => c.Id).ToListAsync();
@@ -133,15 +142,17 @@ namespace TiendaUCN.src.Infrastructure.Data
                     await context.SaveChangesAsync();
                     Log.Information("Productos de prueba e imagenes creados con exito");
                 }
-
             }
             catch (Exception ex)
             {
                 Log.Error(ex, "Error al aplicar migraciones a la base de datos", ex.Message);
-                throw;
             }
         }
 
+        /// <summary>
+        /// Genera un RUT chileno aleatorio en formato "XXXXXXXX-X".
+        /// </summary>
+        /// <returns></returns>
         private static string RandomRut()
         {
             var faker = new Faker();
@@ -150,6 +161,10 @@ namespace TiendaUCN.src.Infrastructure.Data
             return $"{number}-{verifier}";
         }
 
+        /// <summary>
+        /// Genera un número de teléfono chileno aleatorio en formato "+569 XXXX-XXXX".
+        /// </summary>
+        /// <returns></returns>
         private static string RandomPhoneNumber()
         {
             var faker = new Faker();

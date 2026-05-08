@@ -163,11 +163,28 @@ namespace TiendaUCN.src.Application.Services.Implements
 
         public async Task DeleteProductAsync(int id)
         {
-            var productExists = await _productRepository.ExistsByIdAsync(id);
-            if (!productExists)
+            var product = await _productRepository.GetProductByIdForAdminAsync(id);
+            if (product == null)
             {
                 Log.Error("Producto no encontrado con ID: {ProductId}", id);
                 throw new KeyNotFoundException("Producto no encontrado con ID: " + id);
+            }
+
+            // Eliminar imágenes asociadas en Cloudinary
+            if (product.Images != null && product.Images.Any())
+            {
+                foreach (var image in product.Images)
+                {
+                    try
+                    {
+                        await _imageService.DeleteAsync(image.PublicId);
+                    }
+                    catch (Exception ex)
+                    {
+                        Log.Error(ex, "Error al eliminar la imagen en Cloudinary con PublicId: {PublicId}", image.PublicId);
+                        // Dependiendo de la regla de negocio, se podría lanzar la excepción o solo registrar el error
+                    }
+                }
             }
 
             var isDeleted = await _productRepository.DeleteAsync(id);
