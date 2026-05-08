@@ -1,7 +1,13 @@
 # 🛒 Tienda UCN API
 Proyecto correspondiente al taller de Backend del ramo de IDWM.
 
+
 ## Tecnologías Utilizadas
+
+![.NET 9.0](https://img.shields.io/badge/.NET-9.0-512BD4?style=for-the-badge&logo=dotnet)
+![Entity Framework Core](https://img.shields.io/badge/EF_Core-9.0-3AC358?style=for-the-badge&logo=entityframework)
+![SQLite](https://img.shields.io/badge/SQLite-003B57?style=for-the-badge&logo=sqlite&logoColor=white)
+![Serilog](https://img.shields.io/badge/Serilog-Logging-yellow?style=for-the-badge)
 
 - **Framework:** ASP.NET Core 9.0
 - **Versionado:** Git + Conventional Commits
@@ -14,6 +20,7 @@ Proyecto correspondiente al taller de Backend del ramo de IDWM.
 - **Mock Data:** Bogus
 - **Envío de Correos:** Resend
 - **Variables de Entorno:** DotNetEnv
+- **Almacenamiento de Imágenes:** Cloudinary
 
 ## 👥 Integrantes del Equipo
 
@@ -179,5 +186,5 @@ Para probar la funcionalidad de los endpoints, puedes utilizar **Postman**:
 3. Importa la Colección y el Entorno yendo a `Import` > `Upload Files` (o arrastrando los archivos de `docs/postman`).
 4. Selecciona el Entorno importado en la esquina superior derecha de Postman (esto configurará la `baseUrl` automáticamente).
 5. **Autenticación**: Muchos endpoints están protegidos. Primero debes enviar una solicitud al endpoint de **Login** para obtener un Token JWT.
-6. Copia el Token obtenido, ve a la pestaña **Authorization** de la solicitud que deseas probar (o en la configuración global de la colección), selecciona el tipo **Bearer Token** y pega tu token ahí.
+6. El Token obtenido se guardará en una variable de entorno para utilizarlo automáticamente en las siguientes solicitudes (o en caso contrario, ve a la pestaña **Authorization** de la solicitud que deseas probar (o en la configuración global de la colección), selecciona el tipo **Bearer Token** y pega tu token ahí).
 7. ¡Ya estás listo para enviar solicitudes y probar la API!
