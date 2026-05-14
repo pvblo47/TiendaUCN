@@ -326,6 +326,7 @@ namespace TiendaUCN.src.Application.Services.Implements
                     Log.Information("Producto ID: {ProductId} no disponible para checkout. Será removido del carrito. CartId: {CartId}", cartItem.ProductId, cart.Id);
                     itemsToRemove.Add(cartItem);
                     hasChanges = true;
+                    continue;
                 }
 
 

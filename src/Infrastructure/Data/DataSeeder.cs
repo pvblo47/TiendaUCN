@@ -146,6 +146,7 @@ namespace TiendaUCN.src.Infrastructure.Data
             catch (Exception ex)
             {
                 Log.Error(ex, "Error al aplicar migraciones a la base de datos", ex.Message);
+                throw;
             }
         }
 
