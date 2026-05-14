@@ -859,6 +859,130 @@
             }
           },
           "response": []
+        },
+        {
+          "name": "CheckoutCart",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{token}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "POST",
+            "header": [],
+            "url": {
+              "raw": "{{baseurl}}cart/checkout",
+              "host": [
+                "{{baseurl}}cart"
+              ],
+              "path": [
+                "checkout"
+              ]
+            }
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Order",
+      "item": [
+        {
+          "name": "CreateOrder",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{token}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "POST",
+            "header": [],
+            "url": {
+              "raw": "{{baseurl}}order",
+              "host": [
+                "{{baseurl}}order"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "GetOrderDetail",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{token}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseurl}}order/ORD-250101120000-123",
+              "host": [
+                "{{baseurl}}order"
+              ],
+              "path": [
+                "ORD-250101120000-123"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "GetUserOrders",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{token}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseurl}}order/user-orders?PageNumber=1&PageSize=10&SearchTerm=",
+              "host": [
+                "{{baseurl}}order"
+              ],
+              "path": [
+                "user-orders"
+              ],
+              "query": [
+                {
+                  "key": "PageNumber",
+                  "value": "1"
+                },
+                {
+                  "key": "PageSize",
+                  "value": "10"
+                },
+                {
+                  "key": "SearchTerm",
+                  "value": ""
+                }
+              ]
+            }
+          },
+          "response": []
         }
       ]
     }
