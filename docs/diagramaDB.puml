@@ -1,0 +1,6 @@
+@startuml
+title Diagrama DB
+
+' Agrega aqui las entidades y relaciones de la base de datos.
+
+@enduml
