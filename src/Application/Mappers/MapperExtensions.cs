@@ -23,6 +23,10 @@ namespace TiendaUCN.src.Application.Mappers
             //Configuracion de mapeo para carritos
             var cartMapper = serviceProvider.GetRequiredService<CartMapper>();
             cartMapper.ConfigureAllMappings();
+
+            //Configuracion de mapeo para ordenes
+            var orderMapper = serviceProvider.GetRequiredService<OrderMapper>();
+            orderMapper.ConfigureAllMappings();
         }
     }
 }
