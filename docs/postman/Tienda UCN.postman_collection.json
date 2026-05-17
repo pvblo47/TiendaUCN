@@ -43,7 +43,7 @@
             "header": [],
             "body": {
               "mode": "raw",
-              "raw": "{\r\n\r\n    \"Email\": \"pablo.bravo02@alumnos.ucn.cl\",\r\n    \"VerificationCode\": \"252526\"\r\n\r\n}",
+              "raw": "{\r\n\r\n    \"Email\": \"pablo.bravo02@alumnos.ucn.cl\",\r\n    \"VerificationCode\": \"482808\"\r\n\r\n}",
               "options": {
                 "raw": {
                   "language": "json"
@@ -112,6 +112,775 @@
             "header": [],
             "body": {
               "mode": "raw",
+              "raw": "{\r\n\r\n    \"Email\": \"admin@tiendaucn.cl\",\r\n    \"Password\": \"AdminPassword123!\"\r\n\r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{baseUrl}}auth/login",
+              "host": [
+                "{{baseUrl}}auth"
+              ],
+              "path": [
+                "login"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "ResendVerificationCode",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n    \"Email\": \"pablo.bravo02@alumnos.ucn.cl\"\r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{baseUrl}}auth/resend-verification-code",
+              "host": [
+                "{{baseUrl}}auth"
+              ],
+              "path": [
+                "resend-verification-code"
+              ]
+            }
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Product Management",
+      "item": [
+        {
+          "name": "Brands",
+          "item": [
+            {
+              "name": "CreateBrand",
+              "request": {
+                "auth": {
+                  "type": "bearer",
+                  "bearer": [
+                    {
+                      "key": "token",
+                      "value": "{{token}}",
+                      "type": "string"
+                    }
+                  ]
+                },
+                "method": "POST",
+                "header": [],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\r\n    \"Name\": \"Puma\",\r\n    \"Description\": \"Electronicos de Alemania\"\r\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                },
+                "url": {
+                  "raw": "{{baseUrl}}brand",
+                  "host": [
+                    "{{baseUrl}}brand"
+                  ]
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "UpdateBrand",
+              "request": {
+                "auth": {
+                  "type": "bearer",
+                  "bearer": [
+                    {
+                      "key": "token",
+                      "value": "{{token}}",
+                      "type": "string"
+                    }
+                  ]
+                },
+                "method": "PUT",
+                "header": [],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\r\n    \"Description\": \"Marca exclusiva de telefonos\"\r\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                },
+                "url": {
+                  "raw": "{{baseUrl}}brand/1",
+                  "host": [
+                    "{{baseUrl}}brand"
+                  ],
+                  "path": [
+                    "1"
+                  ]
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "DeleteBrand",
+              "request": {
+                "auth": {
+                  "type": "bearer",
+                  "bearer": [
+                    {
+                      "key": "token",
+                      "value": "{{token}}",
+                      "type": "string"
+                    }
+                  ]
+                },
+                "method": "DELETE",
+                "header": [],
+                "body": {
+                  "mode": "raw",
+                  "raw": ""
+                },
+                "url": {
+                  "raw": "{{baseUrl}}brand/3",
+                  "host": [
+                    "{{baseUrl}}brand"
+                  ],
+                  "path": [
+                    "3"
+                  ]
+                }
+              },
+              "response": []
+            }
+          ]
+        },
+        {
+          "name": "Categories",
+          "item": [
+            {
+              "name": "CreateCategory",
+              "request": {
+                "auth": {
+                  "type": "bearer",
+                  "bearer": [
+                    {
+                      "key": "token",
+                      "value": "{{token}}",
+                      "type": "string"
+                    }
+                  ]
+                },
+                "method": "POST",
+                "header": [],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\r\n    \"Name\": \"Electronicos de lujo\"\r\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                },
+                "url": {
+                  "raw": "{{baseUrl}}category",
+                  "host": [
+                    "{{baseUrl}}category"
+                  ]
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "UpdateCategory",
+              "request": {
+                "auth": {
+                  "type": "bearer",
+                  "bearer": [
+                    {
+                      "key": "token",
+                      "value": "{{token}}",
+                      "type": "string"
+                    }
+                  ]
+                },
+                "method": "PUT",
+                "header": [],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\r\n    \"Name\": \"Productos de aseo\",\r\n    \"Description\": \"Productos de limpieza para el hogar\"\r\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                },
+                "url": {
+                  "raw": "{{baseUrl}}category/6",
+                  "host": [
+                    "{{baseUrl}}category"
+                  ],
+                  "path": [
+                    "6"
+                  ]
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "DeleteCategory",
+              "request": {
+                "auth": {
+                  "type": "bearer",
+                  "bearer": [
+                    {
+                      "key": "token",
+                      "value": "{{token}}",
+                      "type": "string"
+                    }
+                  ]
+                },
+                "method": "DELETE",
+                "header": [],
+                "url": {
+                  "raw": "{{baseUrl}}category/6",
+                  "host": [
+                    "{{baseUrl}}category"
+                  ],
+                  "path": [
+                    "6"
+                  ]
+                }
+              },
+              "response": []
+            }
+          ]
+        },
+        {
+          "name": "Products",
+          "item": [
+            {
+              "name": "CreateProduct",
+              "request": {
+                "auth": {
+                  "type": "bearer",
+                  "bearer": [
+                    {
+                      "key": "token",
+                      "value": "{{token}}",
+                      "type": "string"
+                    }
+                  ]
+                },
+                "method": "POST",
+                "header": [],
+                "body": {
+                  "mode": "formdata",
+                  "formdata": [
+                    {
+                      "key": "Name",
+                      "value": "Medias negrasss",
+                      "type": "text",
+                      "uuid": "6cd74c2c-8480-4bdd-b9de-c6eb44d057dc"
+                    },
+                    {
+                      "key": "Description",
+                      "value": "Medias de algodon",
+                      "type": "text",
+                      "uuid": "fe362b9f-5788-4b96-994d-2401132f46e2"
+                    },
+                    {
+                      "key": "Price",
+                      "value": "6000",
+                      "type": "text",
+                      "uuid": "e749b62a-24a5-4fad-9667-49b37552d6d3"
+                    },
+                    {
+                      "key": "Stock",
+                      "value": "50",
+                      "type": "text",
+                      "uuid": "7eed0085-cda1-4b25-ae50-12acca03b281"
+                    },
+                    {
+                      "key": "CategoryName",
+                      "value": "Ropa",
+                      "type": "text",
+                      "uuid": "01444a26-7ec8-43ca-be68-48a31c2b4c38"
+                    },
+                    {
+                      "key": "BrandName",
+                      "value": "Puma",
+                      "type": "text",
+                      "uuid": "174f1531-7b6c-44c9-82a1-15c0c59973f0"
+                    },
+                    {
+                      "key": "ImagesFiles",
+                      "type": "file",
+                      "uuid": "27c3a8ed-119f-4de7-9c98-67ced1b5d287",
+                      "src": "/C:/Users/ulloc/OneDrive/Imágenes/artworks-000381252885-i490uq-t500x500.jpg"
+                    },
+                    {
+                      "key": "",
+                      "value": "",
+                      "type": "text",
+                      "uuid": "e3ba15a2-1675-45db-b74d-9aa216210489",
+                      "disabled": true
+                    }
+                  ]
+                },
+                "url": {
+                  "raw": "{{baseUrl}}product",
+                  "host": [
+                    "{{baseUrl}}product"
+                  ]
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "SwitchStatus",
+              "request": {
+                "auth": {
+                  "type": "bearer",
+                  "bearer": [
+                    {
+                      "key": "token",
+                      "value": "{{token}}",
+                      "type": "string"
+                    }
+                  ]
+                },
+                "method": "PATCH",
+                "header": [],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\r\n    \r\n}"
+                },
+                "url": {
+                  "raw": "{{baseUrl}}product/switch-status/42",
+                  "host": [
+                    "{{baseUrl}}product"
+                  ],
+                  "path": [
+                    "switch-status",
+                    "42"
+                  ]
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "GetProductForAdmin",
+              "request": {
+                "auth": {
+                  "type": "bearer",
+                  "bearer": [
+                    {
+                      "key": "token",
+                      "value": "{{token}}",
+                      "type": "string"
+                    }
+                  ]
+                },
+                "method": "GET",
+                "header": [],
+                "url": {
+                  "raw": "{{baseUrl}}product/admin/54",
+                  "host": [
+                    "{{baseUrl}}product"
+                  ],
+                  "path": [
+                    "admin",
+                    "54"
+                  ]
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "GetProductForCustomer",
+              "request": {
+                "method": "GET",
+                "header": [],
+                "url": {
+                  "raw": "{{baseurl}}product/40",
+                  "host": [
+                    "{{baseurl}}product"
+                  ],
+                  "path": [
+                    "40"
+                  ]
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "DeleteProduct",
+              "request": {
+                "auth": {
+                  "type": "bearer",
+                  "bearer": [
+                    {
+                      "key": "token",
+                      "value": "{{token}}",
+                      "type": "string"
+                    }
+                  ]
+                },
+                "method": "DELETE",
+                "header": [],
+                "url": {
+                  "raw": "{{baseUrl}}product/54",
+                  "host": [
+                    "{{baseUrl}}product"
+                  ],
+                  "path": [
+                    "54"
+                  ]
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "GetProductsForCustomer",
+              "protocolProfileBehavior": {
+                "disableBodyPruning": true
+              },
+              "request": {
+                "method": "GET",
+                "header": [],
+                "body": {
+                  "mode": "formdata",
+                  "formdata": []
+                },
+                "url": {
+                  "raw": "{{baseUrl}}product?PageNumber=1&PageSize=2&SearchTerm=Gorgeous Rubber Shoes",
+                  "host": [
+                    "{{baseUrl}}product"
+                  ],
+                  "query": [
+                    {
+                      "key": "PageNumber",
+                      "value": "1"
+                    },
+                    {
+                      "key": "PageSize",
+                      "value": "2"
+                    },
+                    {
+                      "key": "SearchTerm",
+                      "value": "Gorgeous Rubber Shoes"
+                    },
+                    {
+                      "key": "cas",
+                      "value": "cac",
+                      "type": "text",
+                      "disabled": true
+                    }
+                  ]
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "GetProductsForAdmin",
+              "request": {
+                "auth": {
+                  "type": "bearer",
+                  "bearer": [
+                    {
+                      "key": "token",
+                      "value": "{{token}}",
+                      "type": "string"
+                    }
+                  ]
+                },
+                "method": "GET",
+                "header": [],
+                "url": {
+                  "raw": "{{baseUrl}}product/admin?PageNumber=1&PageSize=2&SearchTerm=Gorgeous Rubber Shoes",
+                  "host": [
+                    "{{baseUrl}}product"
+                  ],
+                  "path": [
+                    "admin"
+                  ],
+                  "query": [
+                    {
+                      "key": "PageNumber",
+                      "value": "1"
+                    },
+                    {
+                      "key": "PageSize",
+                      "value": "2"
+                    },
+                    {
+                      "key": "SearchTerm",
+                      "value": "Gorgeous Rubber Shoes"
+                    }
+                  ]
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "UpdateProduct",
+              "request": {
+                "auth": {
+                  "type": "bearer",
+                  "bearer": [
+                    {
+                      "key": "token",
+                      "value": "{{token}}",
+                      "type": "string"
+                    }
+                  ]
+                },
+                "method": "PUT",
+                "header": [],
+                "body": {
+                  "mode": "formdata",
+                  "formdata": [
+                    {
+                      "key": "Name",
+                      "value": "Readmi Note",
+                      "type": "text",
+                      "uuid": "17837fe3-ebbd-4609-b22e-71e2a2af0dc9"
+                    },
+                    {
+                      "key": "Description",
+                      "value": "Telefono celular proveniente de china",
+                      "type": "text",
+                      "uuid": "0e952cc6-d028-4af0-9e01-6d15a928279d"
+                    },
+                    {
+                      "key": "Price",
+                      "value": "900000",
+                      "type": "text",
+                      "uuid": "6a4c5708-959e-441d-b2d3-d104a30dae98"
+                    },
+                    {
+                      "key": "Stock",
+                      "value": "50",
+                      "type": "text",
+                      "uuid": "3d6c66fe-0309-4f8c-af3c-94150d69cbb1"
+                    },
+                    {
+                      "key": "CategoryName",
+                      "value": "Electronica",
+                      "type": "text",
+                      "uuid": "835d8880-8520-429d-a4ec-6f05d8aa6057"
+                    },
+                    {
+                      "key": "BrandName",
+                      "value": "Sony",
+                      "type": "text",
+                      "uuid": "de59a24b-3afe-42d2-a2f3-290da6498e95"
+                    },
+                    {
+                      "key": "ImagesToRemove",
+                      "value": "https://res.cloudinary.com/dvyjchrf8/image/upload/v1774836062/product/55/images/gorra_cj8kl9.jpg",
+                      "type": "text",
+                      "uuid": "7bfedd0e-9afa-4b05-bdce-b0eccdda7543"
+                    },
+                    {
+                      "key": "ImagesToRemove",
+                      "value": "https://res.cloudinary.com/dvyjchrf8/image/upload/v1775005979/product/55/images/gorra_vaessi.jpg",
+                      "type": "text",
+                      "uuid": "3aece9ae-4beb-43c1-9388-f89c290a3376",
+                      "disabled": true
+                    },
+                    {
+                      "key": "ImagesToAdd",
+                      "type": "file",
+                      "uuid": "581992b2-fa1c-43a5-ae12-4c741e4cb8db",
+                      "src": [
+                        "postman-cloud:///1ef9cb9f-1da8-4ed0-be28-c33d5e742920",
+                        "postman-cloud:///1ef9cb9a-d132-42d0-a20a-8787a801f9da"
+                      ]
+                    }
+                  ]
+                },
+                "url": {
+                  "raw": "{{baseUrl}}product/54",
+                  "host": [
+                    "{{baseUrl}}product"
+                  ],
+                  "path": [
+                    "54"
+                  ]
+                }
+              },
+              "response": []
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "Cart",
+      "item": [
+        {
+          "name": "GetCart",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}cart",
+              "host": [
+                "{{baseUrl}}cart"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "AddCartItem",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n    \"ProductId\": 1,\r\n    \"Quantity\": 1\r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{baseurl}}cart/items",
+              "host": [
+                "{{baseurl}}cart"
+              ],
+              "path": [
+                "items"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "UpdateItemQuantity",
+          "request": {
+            "method": "PATCH",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n    \"ProductId\": 1,\r\n    \"Quantity\": 10\r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{baseurl}}cart/items",
+              "host": [
+                "{{baseurl}}cart"
+              ],
+              "path": [
+                "items"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "RemoveItem",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{token}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "DELETE",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}cart/items/2",
+              "host": [
+                "{{baseUrl}}cart"
+              ],
+              "path": [
+                "items",
+                "2"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "ClearCart",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{token}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "PUT",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}cart/clear",
+              "host": [
+                "{{baseUrl}}cart"
+              ],
+              "path": [
+                "clear"
+              ]
+            }
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Flujo Compra de Usuario",
+      "item": [
+        {
+          "name": "Login Copy",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "var response = pm.response. json();\r",
+                  "if (pm.response.code === 200 && response.data !== null && response.data !== undefined) {\r",
+                  "    pm.collectionVariables.set(\"client_token\", response.data);\r",
+                  "}"
+                ],
+                "type": "text/javascript",
+                "packages": {},
+                "requests": {}
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
               "raw": "{\r\n\r\n    \"Email\": \"pablo.bravo02@alumnos.ucn.cl\",\r\n    \"Password\": \"Hola1234*\"\r\n\r\n}",
               "options": {
                 "raw": {
@@ -130,91 +899,124 @@
             }
           },
           "response": []
-        }
-      ]
-    },
-    {
-      "name": "Product Management",
-      "item": []
-    },
-    {
-      "name": "Cart",
-      "item": [
+        },
         {
           "name": "GetCart",
-          "request": {
-            "method": "GET",
-            "header": []
-          },
-          "response": []
-        },
-        {
-          "name": "AddCartItem",
-          "request": {
-            "method": "POST",
-            "header": []
-          },
-          "response": []
-        },
-        {
-          "name": "UpdateItemQuantity",
-          "request": {
-            "method": "PATCH",
-            "header": [],
-            "url": {
-              "raw": ""
-            }
-          },
-          "response": []
-        },
-        {
-          "name": "RemoveItem",
-          "request": {
-            "method": "DELETE",
-            "header": []
-          },
-          "response": []
-        },
-        {
-          "name": "ClearCart",
-          "request": {
-            "method": "PUT",
-            "header": []
-          },
-          "response": []
-        },
-        {
-          "name": "CheckoutCart",
           "request": {
             "auth": {
               "type": "bearer",
               "bearer": [
                 {
                   "key": "token",
-                  "value": "{{token}}",
+                  "value": "{{client_token}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}cart",
+              "host": [
+                "{{baseUrl}}cart"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "GetProductForCustomer Copy",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "const body = pm.response.json();\r",
+                  "\r",
+                  "const product = body.data.products[0];\r",
+                  "pm.collectionVariables.set(\"productId\", product.id);"
+                ],
+                "type": "text/javascript",
+                "packages": {},
+                "requests": {}
+              }
+            },
+            {
+              "listen": "prerequest",
+              "script": {
+                "exec": [],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{client_token}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}product?PageSize=25&PageNumber=1",
+              "host": [
+                "{{baseUrl}}product"
+              ],
+              "query": [
+                {
+                  "key": "PageSize",
+                  "value": "25"
+                },
+                {
+                  "key": "PageNumber",
+                  "value": "1"
+                }
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "AddCartItem Copy",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{client_token}}",
                   "type": "string"
                 }
               ]
             },
             "method": "POST",
             "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n    \"ProductId\": {{productId}},\r\n    \"Quantity\": 1\r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
             "url": {
-              "raw": "{{baseurl}}cart/checkout",
+              "raw": "{{baseUrl}}cart/items",
               "host": [
-                "{{baseurl}}cart"
+                "{{baseUrl}}cart"
               ],
               "path": [
-                "checkout"
+                "items"
               ]
             }
           },
           "response": []
-        }
-      ]
-    },
-    {
-      "name": "Order",
-      "item": [
+        },
         {
           "name": "CreateOrder",
           "request": {
@@ -223,7 +1025,7 @@
               "bearer": [
                 {
                   "key": "token",
-                  "value": "{{token}}",
+                  "value": "{{client_token}}",
                   "type": "string"
                 }
               ]
@@ -231,9 +1033,384 @@
             "method": "POST",
             "header": [],
             "url": {
-              "raw": "{{baseurl}}order",
+              "raw": "{{baseUrl}}order",
               "host": [
-                "{{baseurl}}order"
+                "{{baseUrl}}order"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "GetCart Copy",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{client_token}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}cart",
+              "host": [
+                "{{baseUrl}}cart"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "GetOrder",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{client_token}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}order/user-orders?PageSize=25&PageNumber=1",
+              "host": [
+                "{{baseUrl}}order"
+              ],
+              "path": [
+                "user-orders"
+              ],
+              "query": [
+                {
+                  "key": "PageSize",
+                  "value": "25"
+                },
+                {
+                  "key": "PageNumber",
+                  "value": "1"
+                }
+              ]
+            }
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Flujo del Cliente: Desde ver productos hasta comprar",
+      "item": [
+        {
+          "name": "Login Copy 2",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "var response = pm.response. json();\r",
+                  "if (pm.response.code === 200 && response.data !== null && response.data !== undefined) {\r",
+                  "    pm.collectionVariables.set(\"client_token\", response.data);\r",
+                  "}"
+                ],
+                "type": "text/javascript",
+                "packages": {},
+                "requests": {}
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n\r\n    \"Email\": \"pablo.bravo02@alumnos.ucn.cl\",\r\n    \"Password\": \"Hola1234*\"\r\n\r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{baseUrl}}auth/login",
+              "host": [
+                "{{baseUrl}}auth"
+              ],
+              "path": [
+                "login"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "GetProductForCustomer Copy 2",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  ""
+                ],
+                "type": "text/javascript",
+                "packages": {},
+                "requests": {}
+              }
+            },
+            {
+              "listen": "prerequest",
+              "script": {
+                "exec": [
+                  ""
+                ],
+                "type": "text/javascript",
+                "packages": {},
+                "requests": {}
+              }
+            }
+          ],
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{client_token}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}product?PageSize=25&PageNumber=1",
+              "host": [
+                "{{baseUrl}}product"
+              ],
+              "query": [
+                {
+                  "key": "PageSize",
+                  "value": "25"
+                },
+                {
+                  "key": "PageNumber",
+                  "value": "1"
+                }
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "GetProduct",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "// 1. Convertimos la respuesta a JSON\r",
+                  "const body = pm.response.json();\r",
+                  "// 2. Verificamos que exista data (el producto)\r",
+                  "if (body.data) {\r",
+                  "    // 3. Guardamos su ID en las variables\r",
+                  "    pm.collectionVariables.set(\"clickedProductId\", body.data.id);\r",
+                  "    \r",
+                  "    console.log(\"Se guardó el producto con ID:\", body.data.id);\r",
+                  "} else {\r",
+                  "    console.log(\"No se encontró el producto en la respuesta.\");\r",
+                  "}"
+                ],
+                "type": "text/javascript",
+                "packages": {},
+                "requests": {}
+              }
+            },
+            {
+              "listen": "prerequest",
+              "script": {
+                "exec": [],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{client_token}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}product/20",
+              "host": [
+                "{{baseUrl}}product"
+              ],
+              "path": [
+                "20"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "AddCartItem Copy 2",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{client_token}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n    \"ProductId\": {{clickedProductId}},\r\n    \"Quantity\": 1\r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{baseUrl}}cart/items",
+              "host": [
+                "{{baseUrl}}cart"
+              ],
+              "path": [
+                "items"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "GetCart Copy 2",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{client_token}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}cart",
+              "host": [
+                "{{baseUrl}}cart"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "CreateOrder Copy",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "// 1. Convertimos la respuesta a JSON\r",
+                  "const body = pm.response.json();\r",
+                  "// 2. Verificamos que exista la propiedad data (que contiene el código de la orden)\r",
+                  "if (body.data) {\r",
+                  "    // 3. Guardamos el código de la orden en una variable llamada \"orderCode\"\r",
+                  "    pm.collectionVariables.set(\"orderCode\", body.data);\r",
+                  "    \r",
+                  "    // Imprimimos en la consola de Postman para confirmar\r",
+                  "    console.log(\"Se guardó el código de la orden:\", body.data);\r",
+                  "} else {\r",
+                  "    console.log(\"No se devolvió ningún código de orden en la respuesta.\");\r",
+                  "}"
+                ],
+                "type": "text/javascript",
+                "packages": {},
+                "requests": {}
+              }
+            },
+            {
+              "listen": "prerequest",
+              "script": {
+                "exec": [],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{client_token}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "POST",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}order",
+              "host": [
+                "{{baseUrl}}order"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "GetOrder Copy",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{client_token}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}order/user-orders?PageSize=25&PageNumber=1",
+              "host": [
+                "{{baseUrl}}order"
+              ],
+              "path": [
+                "user-orders"
+              ],
+              "query": [
+                {
+                  "key": "PageSize",
+                  "value": "25"
+                },
+                {
+                  "key": "PageNumber",
+                  "value": "1"
+                }
               ]
             }
           },
@@ -247,7 +1424,7 @@
               "bearer": [
                 {
                   "key": "token",
-                  "value": "{{token}}",
+                  "value": "{{client_token}}",
                   "type": "string"
                 }
               ]
@@ -255,53 +1432,12 @@
             "method": "GET",
             "header": [],
             "url": {
-              "raw": "{{baseurl}}order/ORD-250101120000-123",
+              "raw": "{{baseUrl}}order/{{orderCode}}",
               "host": [
-                "{{baseurl}}order"
+                "{{baseUrl}}order"
               ],
               "path": [
-                "ORD-250101120000-123"
-              ]
-            }
-          },
-          "response": []
-        },
-        {
-          "name": "GetUserOrders",
-          "request": {
-            "auth": {
-              "type": "bearer",
-              "bearer": [
-                {
-                  "key": "token",
-                  "value": "{{token}}",
-                  "type": "string"
-                }
-              ]
-            },
-            "method": "GET",
-            "header": [],
-            "url": {
-              "raw": "{{baseurl}}order/user-orders?PageNumber=1&PageSize=10&SearchTerm=",
-              "host": [
-                "{{baseurl}}order"
-              ],
-              "path": [
-                "user-orders"
-              ],
-              "query": [
-                {
-                  "key": "PageNumber",
-                  "value": "1"
-                },
-                {
-                  "key": "PageSize",
-                  "value": "10"
-                },
-                {
-                  "key": "SearchTerm",
-                  "value": ""
-                }
+                "{{orderCode}}"
               ]
             }
           },
@@ -313,6 +1449,22 @@
   "variable": [
     {
       "key": "token",
+      "value": ""
+    },
+    {
+      "key": "client_token",
+      "value": ""
+    },
+    {
+      "key": "productId",
+      "value": ""
+    },
+    {
+      "key": "clickedProductId",
+      "value": ""
+    },
+    {
+      "key": "orderCode",
       "value": ""
     }
   ]
