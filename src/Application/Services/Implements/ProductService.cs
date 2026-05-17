@@ -1,4 +1,5 @@
 using Mapster;
+using Microsoft.Extensions.DependencyInjection;
 using Serilog;
 using System.Diagnostics;
 using TiendaUCN.src.Application.DTOs.ProductDTO;
@@ -13,17 +14,20 @@ namespace TiendaUCN.src.Application.Services.Implements
     public class ProductService : IProductService
     {
         private readonly IProductRepository _productRepository;
-        private readonly IImageService _imageService;
         private readonly IBrandRepository _brandRepository;
         private readonly ICategoryRepository _categoryRepository;
         private readonly IConfiguration _configuration;
-        public ProductService(IProductRepository productRepository, IImageService imageService, IBrandRepository brandRepository, ICategoryRepository categoryRepository, IConfiguration configuration)
+        private readonly IServiceProvider _serviceProvider;
+
+        private IImageService ImageService => _serviceProvider.GetRequiredService<IImageService>();
+
+        public ProductService(IProductRepository productRepository, IBrandRepository brandRepository, ICategoryRepository categoryRepository, IConfiguration configuration, IServiceProvider serviceProvider)
         {
             _productRepository = productRepository;
-            _imageService = imageService;
             _brandRepository = brandRepository;
             _categoryRepository = categoryRepository;
             _configuration = configuration;
+            _serviceProvider = serviceProvider;
         }
 
         public async Task<string> CreateProductAsync(CreateProductDTO createProductDTO)
@@ -69,7 +73,7 @@ namespace TiendaUCN.src.Application.Services.Implements
             foreach (var image in createProductDTO.ImagesFiles)
             {
                 Log.Information("Imagen asociada al producto: {@Image}", image);
-                await _imageService.UploadAsync(image, product.Id);
+                await ImageService.UploadAsync(image, product.Id);
             }
 
             return product.Id.ToString();
@@ -177,7 +181,7 @@ namespace TiendaUCN.src.Application.Services.Implements
                 {
                     try
                     {
-                        await _imageService.DeleteAsync(image.PublicId);
+                        await ImageService.DeleteAsync(image.PublicId);
                     }
                     catch (Exception ex)
                     {
@@ -392,7 +396,7 @@ namespace TiendaUCN.src.Application.Services.Implements
                     var imageToDelete = product.Images.FirstOrDefault(img => img.ImageUrl == imageUrl);
                     if (imageToDelete != null)
                     {
-                        await _imageService.DeleteAsync(imageToDelete.PublicId);
+                        await ImageService.DeleteAsync(imageToDelete.PublicId);
                     }
                     else
                     {
@@ -407,7 +411,7 @@ namespace TiendaUCN.src.Application.Services.Implements
                 foreach (var image in updateProductDTO.ImagesToAdd)
                 {
                     Log.Information("Nueva imagen asociada al producto: {@Image}", image);
-                    await _imageService.UploadAsync(image, id);
+                    await ImageService.UploadAsync(image, id);
                 }
             }
         }
