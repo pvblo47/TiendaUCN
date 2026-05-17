@@ -1,6 +1,146 @@
-@startuml
-title Diagrama DB
+@startuml Diagrama_BD_TiendaUCN
+hide circle
+skinparam linetype ortho
 
-' Agrega aqui las entidades y relaciones de la base de datos.
+title Diagrama de Base de Datos - TiendaUCN
+
+entity "Roles" as Roles {
+  * Id : int <<PK>>
+  --
+  * Name : string
+  * IsDeleted : bool
+}
+
+entity "Users" as Users {
+  * Id : int <<PK>>
+  --
+  * Name : string
+  * Email : string
+  * EmailConfirmed : bool
+  * Rut : string
+  * PhoneNumber : string
+  * BirthDate : DateTime
+  * Gender : string
+  * PasswordHash : string
+  * RoleId : int <<FK>>
+  * CreatedAt : DateTime
+  * IsDeleted : bool
+}
+
+entity "VerificationCodes" as VerificationCodes {
+  * Id : int <<PK>>
+  --
+  * Code : string
+  * Expiry : DateTime
+  * FailedAttempts : int
+  * DateToResend : DateTime
+  * UserId : int <<FK, UNIQUE>>
+}
+
+entity "Brands" as Brands {
+  * Id : int <<PK>>
+  --
+  * Name : string
+  Description : string?
+  * IsDeleted : bool
+}
+
+entity "Categories" as Categories {
+  * Id : int <<PK>>
+  --
+  * Name : string
+  Description : string?
+  * IsDeleted : bool
+}
+
+entity "Products" as Products {
+  * Id : int <<PK>>
+  --
+  * Name : string
+  * Description : string
+  * Price : int
+  * Stock : int
+  * BrandId : int <<FK>>
+  * CategoryId : int <<FK>>
+  * IsActive : bool
+  * CreatedAt : DateTime
+  * IsDeleted : bool
+}
+
+entity "Images" as Images {
+  * Id : int <<PK>>
+  --
+  * ImageUrl : string
+  * PublicId : string
+  * ProductId : int <<FK>>
+}
+
+entity "Carts" as Carts {
+  * Id : int <<PK>>
+  --
+  * TotalPrice : int
+  * BuyerId : string
+  UserId : int? <<FK>>
+}
+
+entity "CartItems" as CartItems {
+  * Id : int <<PK>>
+  --
+  * Quantity : int
+  * CartId : int <<FK>>
+  * ProductId : int <<FK>>
+}
+
+entity "Orders" as Orders {
+  * Id : int <<PK>>
+  --
+  * Code : string
+  * TransactionDate : DateTime
+  * TotalPrice : int
+  * UserId : int <<FK>>
+}
+
+entity "OrderItems" as OrderItems {
+  * Id : int <<PK>>
+  --
+  * Quantity : int
+  * NameAtMoment : string
+  * DescriptionAtMoment : string
+  * UnitPriceAtMoment : int
+  * ImageUrlAtMoment : string
+  * SubtotalPrice : int
+  * OrderId : int <<FK>>
+}
+
+entity "BlacklistedTokens" as BlacklistedTokens {
+  * Id : int <<PK>>
+  --
+  * TokenId : string
+  * ExpireAt : DateTime
+}
+
+Roles ||--o{ Users : "RoleId"
+Users ||--|| VerificationCodes : "UserId"
+Users |o--o{ Carts : "UserId nullable"
+Users ||--o{ Orders : "UserId"
+
+Brands ||--o{ Products : "BrandId"
+Categories ||--o{ Products : "CategoryId"
+Products ||--o{ Images : "ProductId"
+
+Carts ||--o{ CartItems : "CartId"
+Products ||--o{ CartItems : "ProductId"
+
+Orders ||--o{ OrderItems : "OrderId"
+
+note right of BlacklistedTokens
+Tabla independiente usada para
+invalidar JWT cerrados en logout.
+end note
+
+note bottom of OrderItems
+Guarda datos estáticos del producto
+al momento de la compra.
+end note
 
 @enduml
