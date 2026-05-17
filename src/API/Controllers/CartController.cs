@@ -67,6 +67,19 @@ namespace TiendaUCN.src.API.Controllers
             return Ok(new GenericResponse<CartDTO>("Carrito limpiado exitosamente", cart));
         }
 
+        /// <summary>
+        /// Endpoint para realizar el checkout del carrito de compras.
+        /// </summary>
+        /// <returns>DTO del carrito de compras</returns>
+        [HttpPost("checkout")]
+        [Authorize(Roles = "Customer")]
+        public async Task<IActionResult> CheckoutCart()
+        {
+            var userId = GetUserId();
+            var result = await _cartService.CheckoutCartAsync(userId!.Value);
+            return Ok(new GenericResponse<CheckoutResultDTO>("Checkout realizado exitosamente", result));
+        }
+
         private string GetBuyerId()
         {
             // Intentar obtener el buyerId del contexto HTTP

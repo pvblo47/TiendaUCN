@@ -255,6 +255,8 @@ namespace TiendaUCN.src.Application.Services.Implements
         }
 
         public async Task<CartDTO> ClearCartAsync(string buyerId, int? userId = null)
+
+
         {
             // Obtener el carrito actual
             var cart = await GetCartAsync(buyerId, userId);
@@ -286,6 +288,97 @@ namespace TiendaUCN.src.Application.Services.Implements
             return cart.Adapt<CartDTO>();
         }
 
+        /// <summary>
+        /// Realiza el proceso de checkout del carrito de compras.
+        /// </summary>
+        /// <param name="userId">Identificador del usuario autenticado.</param>
+        /// <returns>Un objeto <see cref="CheckoutResultDTO"/> con la información del resultado del checkout.</returns>
+        /// <exception cref="Exception">Se lanza si ocurre un error durante el proceso de checkout.</exception>
+        public async Task<CheckoutResultDTO> CheckoutCartAsync(int userId)
+        {
+            // Obtener el carrito actual
+            var cart = await _cartRepository.GetByUserIdAsync(userId);
+            if (cart == null)
+            {
+                Log.Information("No se encontró un carrito para userId: {UserId}", userId);
+                throw new Exception($"No se encontró un carrito para userId: {userId}.");
+            }
+
+            // Validar que el carrito no esté vacío
+            if (cart.CartItems.Count == 0)
+            {
+                Log.Information("El carrito está vacío para userId: {UserId}", userId);
+                throw new Exception($"El carrito está vacío para userId: {userId}.");
+            }
+
+            // Listas para almacenar los items que se actualizarán o eliminarán
+            var itemsToRemove = new List<CartItem>();
+            var itemsToUpdate = new List<(CartItem item, int newQuantity)>();
+            bool hasChanges = false;
+
+            // Realizar el proceso de checkout
+            foreach (var cartItem in cart.CartItems)
+            {
+
+                var product = await _productRepository.GetProductByIdForCustomerAsync(cartItem.ProductId);
+                if (product == null || product!.Stock <= 0)
+                {
+                    Log.Information("Producto ID: {ProductId} no disponible para checkout. Será removido del carrito. CartId: {CartId}", cartItem.ProductId, cart.Id);
+                    itemsToRemove.Add(cartItem);
+                    hasChanges = true;
+                    continue;
+                }
+
+
+                if (product!.Stock < cartItem.Quantity)
+                {
+                    Log.Information("Stock insuficiente para el producto ID: {ProductId} durante el checkout. Stock disponible: {Stock}, cantidad en carrito: {Quantity}. Se actualizará la cantidad en el carrito. CartId: {CartId}", cartItem.ProductId, product.Stock, cartItem.Quantity, cart.Id);
+                    itemsToUpdate.Add((cartItem, product!.Stock));
+                    hasChanges = true;
+                }
+            }
+
+            // Si hay items a remover o actualizar, realizar los cambios en el carrito
+            if (hasChanges)
+            {
+                foreach (var itemToRemove in itemsToRemove)
+                {
+                    await _cartRepository.RemoveItemAsync(cart.Id, itemToRemove.Id);
+                }
+                foreach (var (item, newQuantity) in itemsToUpdate)
+                {
+                    await _cartRepository.UpdateItemQuantityAsync(cart.Id, item.Id, newQuantity);
+                }
+
+                Log.Information("Carrito actualizado tras checkout. ItemsEliminados: {RemovedCount}, ItemsActualizados: {UpdatedCount}", itemsToRemove.Count, itemsToUpdate.Count);
+
+                // Obtener el carrito actualizado después de los cambios
+                cart = await _cartRepository.GetByUserIdAsync(userId);
+
+                // Actualizar el precio total del carrito
+                var newTotalPrice = cart!.CartItems.Sum(ci => ci.Quantity * ci.Product.Price);
+                await _cartRepository.UpdateTotalPriceAsync(cart.Id, newTotalPrice);
+                Log.Information("Precio total actualizado. CartId: {CartId}", cart.Id);
+
+                cart.TotalPrice = newTotalPrice;
+            }
+            else
+            {
+                Log.Information("No se requirieron ajustes en el carrito durante checkout. CartId: {CartId}", cart.Id);
+            }
+
+            // Mapear el resultado del checkout a CheckoutResultDTO
+            var checkoutResult = new CheckoutResultDTO
+            {
+                CartUpdated = cart.Adapt<CartDTO>(),
+                CartUpdatesDTO = new CartUpdatesDTO
+                {
+                    UpdatedItemsNames = itemsToUpdate.Select(i => i.item.Product.Name).ToList() ?? null!,
+                    RemovedItemsNames = itemsToRemove.Select(i => i.Product.Name).ToList() ?? null!
+                }
+            };
+            return checkoutResult;
+        }
         private async Task<int> CreateEmptyCartAsync(string buyerId, int? userId)
         {
             // Crear un nuevo carrito vacío
