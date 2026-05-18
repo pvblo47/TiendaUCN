@@ -61,7 +61,7 @@ Abre VsCode con el siguiente comando:
 code .
 ```
 
-### 2. Cambiar de rama (Opcional)
+### 2. Cambiar de rama (Opcional, pero en este caso todo está en el main)
 
 Abre la terminal en VsCode y cambia a la rama de desarrollo (si es necesario trabajar allí):
 ```bash
