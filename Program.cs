@@ -126,6 +126,14 @@ builder.Services.AddAuthentication(options =>
     });
 #endregion
 
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy("AllowNextJs",
+    policy => policy.WithOrigins("https//localhost:3000", "https//localhost:3001") //Puertos del frontend
+    .AllowAnyMethod() //Permite cualquier tipo de solicitud (GET, POST, PUT, DELETE, etc.)
+    .AllowAnyHeader()); //Permite cualquier tipo de encabezado
+
+});
 
 var app = builder.Build();
 
@@ -184,7 +192,8 @@ app.UseMiddleware<ExceptionHandlingMiddleware>(); // 1 - maneja excepciones
 app.UseMiddleware<CartMiddleware>(); // 2 - maneja las cookies del carrito para usuarios anonimos
 app.UseAuthentication(); // 3 - valida el JWT
 app.UseMiddleware<BlacklistMiddleware>(); // 4 - verifica blacklist
-app.UseAuthorization(); // 5 - verifica roles y permisos
+app.UseCors("AllowNextJs"); // 5 - permite solicitudes desde Next.js
+app.UseAuthorization(); // 6 - verifica roles y permisos
 app.MapOpenApi();
 app.MapControllers();
 app.Run();

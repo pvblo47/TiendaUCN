@@ -1,0 +1,279 @@
+{
+	"info": {
+		"_postman_id": "83cf71a2-c7d0-40cb-ba15-df720eb18a22",
+		"name": "TiendaUCN - Flujo Demo Admin",
+		"description": "Colección de Postman para demostrar el flujo completo de administración en TiendaUCN: Login, Creación de Producto (con imagen) y Eliminación de Producto.",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "1. Login Admin",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Login exitoso\", function () {",
+							"    pm.response.to.have.status(200);",
+							"    var jsonData = pm.response.json();",
+							"    pm.expect(jsonData.message).to.eql(\"Login exitoso\");",
+							"    pm.expect(jsonData.data).to.be.a(\"string\");",
+							"    ",
+							"    // Guardar el token en las variables de la colección",
+							"    pm.collectionVariables.set(\"adminToken\", jsonData.data);",
+							"    console.log(\"Token de administrador guardado con éxito.\");",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n  \"email\": \"admin@tiendaucn.cl\",\n  \"password\": \"AdminPassword123!\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{baseUrl}}/api/Auth/login",
+					"host": [
+						"{{baseUrl}}"
+					],
+					"path": [
+						"api",
+						"Auth",
+						"login"
+					]
+				},
+				"description": "Inicia sesión como administrador usando las credenciales predeterminadas para obtener el token JWT."
+			},
+			"response": []
+		},
+		{
+			"name": "2. Crear Producto",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Producto creado exitosamente\", function () {",
+							"    pm.response.to.have.status(201);",
+							"    var jsonData = pm.response.json();",
+							"    pm.expect(jsonData.message).to.eql(\"Producto creado exitosamente\");",
+							"    pm.expect(jsonData.data).to.exist;",
+							"    ",
+							"    // Guardar el ID del producto creado en las variables de la colección",
+							"    pm.collectionVariables.set(\"createdProductId\", jsonData.data);",
+							"    console.log(\"ID del producto creado asignado a createdProductId: \" + jsonData.data);",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{adminToken}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "formdata",
+					"formdata": [
+						{
+							"key": "Name",
+							"value": "Audífonos Sony XM5",
+							"type": "text"
+						},
+						{
+							"key": "Description",
+							"value": "Audífonos inalámbricos de diadema premium con cancelación activa de ruido líder.",
+							"type": "text"
+						},
+						{
+							"key": "Price",
+							"value": "399990",
+							"type": "text"
+						},
+						{
+							"key": "Stock",
+							"value": "15",
+							"type": "text"
+						},
+						{
+							"key": "CategoryName",
+							"value": "Electronica",
+							"type": "text"
+						},
+						{
+							"key": "BrandName",
+							"value": "Sony",
+							"type": "text"
+						},
+						{
+							"key": "ImagesFiles",
+							"type": "file",
+							"src": "demo_product_image.png",
+							"description": "Selecciona la imagen de prueba demo_product_image.png provista en el directorio postman/"
+						}
+					]
+				},
+				"url": {
+					"raw": "{{baseUrl}}/api/Product",
+					"host": [
+						"{{baseUrl}}"
+					],
+					"path": [
+						"api",
+						"Product"
+					]
+				},
+				"description": "Crea un producto nuevo como administrador. Requiere cargar una imagen válida en form-data."
+			},
+			"response": []
+		},
+		{
+			"name": "3. Ver Detalle de Producto (Admin)",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Producto encontrado exitosamente\", function () {",
+							"    pm.response.to.have.status(200);",
+							"    var jsonData = pm.response.json();",
+							"    pm.expect(jsonData.message).to.eql(\"Producto encontrado exitosamente\");",
+							"    pm.expect(jsonData.data.name.toLowerCase()).to.include(\"audífonos\");",
+							"    console.log(\"Detalles verificados. Nombre: \" + jsonData.data.name + \" | Stock: \" + jsonData.data.stock);",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{adminToken}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{baseUrl}}/api/Product/admin/{{createdProductId}}",
+					"host": [
+						"{{baseUrl}}"
+					],
+					"path": [
+						"api",
+						"Product",
+						"admin",
+						"{{createdProductId}}"
+					]
+				},
+				"description": "Verifica los detalles del producto creado en el panel de administrador utilizando el ID guardado."
+			},
+			"response": []
+		},
+		{
+			"name": "4. Eliminar Producto",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Producto eliminado exitosamente\", function () {",
+							"    pm.response.to.have.status(200);",
+							"    var jsonData = pm.response.json();",
+							"    pm.expect(jsonData.message).to.eql(\"Producto eliminado exitosamente\");",
+							"    console.log(\"Producto eliminado de forma segura.\");",
+							"    ",
+							"    // Limpiar variables de la colección tras finalizar el flujo",
+							"    pm.collectionVariables.unset(\"createdProductId\");",
+							"    console.log(\"Flujo completado y variables limpiadas.\");",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{adminToken}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "DELETE",
+				"header": [],
+				"url": {
+					"raw": "{{baseUrl}}/api/Product/{{createdProductId}}",
+					"host": [
+						"{{baseUrl}}"
+					],
+					"path": [
+						"api",
+						"Product",
+						"{{createdProductId}}"
+					]
+				},
+				"description": "Elimina el producto recién creado por su ID para dejar el entorno limpio después de la demostración."
+			},
+			"response": []
+		}
+	],
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		}
+	],
+	"variable": [
+		{
+			"key": "adminToken",
+			"value": "",
+			"type": "string"
+		},
+		{
+			"key": "createdProductId",
+			"value": "",
+			"type": "string"
+		}
+	]
+}

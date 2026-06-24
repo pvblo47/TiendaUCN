@@ -175,9 +175,11 @@ namespace TiendaUCN.src.Application.Services.Implements
             }
 
             // Eliminar imágenes asociadas en Cloudinary
+            // Se materializa a lista para evitar "Collection was modified" al eliminar
+            // registros rastreados por EF Core durante la enumeración.
             if (product.Images != null && product.Images.Any())
             {
-                foreach (var image in product.Images)
+                foreach (var image in product.Images.ToList())
                 {
                     try
                     {
