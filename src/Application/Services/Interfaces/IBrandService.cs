@@ -7,5 +7,6 @@ namespace TiendaUCN.src.Application.Services.Interfaces
         Task<string> CreateBrandAsync(CreateBrandCategoryDTO brandDto);
         Task<string> UpdateBrandAsync(int brandId, UpdateBrandCategoryDTO brandDto);
         Task<string> DeleteBrandAsync(int brandId);
+        Task<List<CatalogItemDTO>> GetAllActiveBrandsAsync();
     }
 }

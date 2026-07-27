@@ -137,5 +137,11 @@ namespace TiendaUCN.src.Application.Services.Implements
 
             return $"Marca con ID {brandId} eliminada exitosamente.";
         }
+
+        public async Task<List<CatalogItemDTO>> GetAllActiveBrandsAsync()
+        {
+            var brands = await _brandRepository.GetAllActiveAsync();
+            return brands.Adapt<List<CatalogItemDTO>>();
+        }
     }
 }

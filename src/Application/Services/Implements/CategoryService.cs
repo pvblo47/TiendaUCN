@@ -4,7 +4,6 @@ using TiendaUCN.src.Application.DTOs.BrandCategoryDTO;
 using TiendaUCN.src.Application.Services.Interfaces;
 using TiendaUCN.src.Domain.Models;
 using TiendaUCN.src.Infrastructure.Repositories.Interfaces;
-
 namespace TiendaUCN.src.Application.Services.Implements
 {
     public class CategoryService : ICategoryService
@@ -135,6 +134,12 @@ namespace TiendaUCN.src.Application.Services.Implements
             }
 
             return $"Categoría con ID {categoryId} eliminada exitosamente.";
+        }
+
+        public async Task<List<CatalogItemDTO>> GetAllActiveCategoriesAsync()
+        {
+            var categories = await _categoryRepository.GetAllActiveAsync();
+            return categories.Adapt<List<CatalogItemDTO>>();
         }
     }
 }

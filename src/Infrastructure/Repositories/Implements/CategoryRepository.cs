@@ -68,5 +68,13 @@ namespace TiendaUCN.src.Infrastructure.Repositories.Implements
                 .Select(b => b.Id)
                 .FirstOrDefaultAsync();
         }
+
+        public async Task<List<Category>> GetAllActiveAsync()
+        {
+            return await _context.Categories
+                .Where(c => !c.IsDeleted)
+                .OrderBy(c => c.Name)
+                .ToListAsync();
+        }
     }
 }

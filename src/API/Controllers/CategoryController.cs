@@ -37,5 +37,13 @@ namespace TiendaUCN.src.API.Controllers
             var message = await _categoryService.DeleteCategoryAsync(id);
             return Ok(new GenericResponse<string>(message, null));
         }
+
+        [HttpGet]
+        [AllowAnonymous]
+        public async Task<IActionResult> GetAllActiveCategories()
+        {
+            var result = await _categoryService.GetAllActiveCategoriesAsync();
+            return Ok(new GenericResponse<List<CatalogItemDTO>>("Categorías encontradas exitosamente", result));
+        }
     }
 }

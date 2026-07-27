@@ -88,8 +88,24 @@ namespace TiendaUCN.src.Application.Services.Implements
             var createdVerificationCode = await _verificationCodeRepository.CreateAsync(verificationCodeEntity);
             Log.Information($"Código de verificación generado para el usuario: {user.Email} - Código: {createdVerificationCode.Code}");
 
-            await _emailService.SendVerificationCodeEmailAsync(user.Email, createdVerificationCode.Code);
-            Log.Information($"Se ha enviado un código de verificación al correo electrónico: {user.Email}");
+            // El envío de correo se aísla: si Resend falla (DNS, límite de sandbox, etc.)
+            // el registro del usuario ya se completó y no debe fallar por esto.
+            bool emailSent = true;
+            try
+            {
+                await _emailService.SendVerificationCodeEmailAsync(user.Email, createdVerificationCode.Code);
+                Log.Information($"Se ha enviado un código de verificación al correo electrónico: {user.Email}");
+            }
+            catch (Exception ex)
+            {
+                emailSent = false;
+                Log.Error(ex, $"No se pudo enviar el correo de verificación al usuario {user.Email}. El registro se completó de todas formas.");
+            }
+
+            if (!emailSent)
+            {
+                return "Tu cuenta fue creada, pero no pudimos enviar el correo de verificación en este momento. Puedes solicitar un reenvío del código más tarde.";
+            }
 
             return $"Se ha enviado un código de verificación a su correo electrónico, este código expirara en {_verificationCodeExpiry} minutos";
 
@@ -167,8 +183,15 @@ namespace TiendaUCN.src.Application.Services.Implements
                 throw new InvalidOperationException("Error al verificar el correo electrónico.");
             }
 
-            // Enviar correo de bienvenida
-            await _emailService.SendWelcomeEmailAsync(user.Email);
+            // Enviar correo de bienvenida (no debe revertir la verificación ya confirmada si Resend falla)
+            try
+            {
+                await _emailService.SendWelcomeEmailAsync(user.Email);
+            }
+            catch (Exception ex)
+            {
+                Log.Error(ex, $"No se pudo enviar el correo de bienvenida al usuario {user.Email}. La verificación ya se completó correctamente.");
+            }
 
             Log.Information($"Correo electrónico verificado exitosamente para el usuario {user.Email}");
         }
@@ -272,7 +295,15 @@ namespace TiendaUCN.src.Application.Services.Implements
                 throw new InvalidOperationException("Error al actualizar la fecha para reenviar un nuevo código de verificación.");
             }
 
-            await _emailService.SendVerificationCodeEmailAsync(user.Email, verificationCode);
+            try
+            {
+                await _emailService.SendVerificationCodeEmailAsync(user.Email, verificationCode);
+            }
+            catch (Exception ex)
+            {
+                Log.Error(ex, $"No se pudo reenviar el correo de verificación al usuario {user.Email}.");
+                return "El código fue generado, pero no pudimos reenviar el correo en este momento. Inténtalo nuevamente en unos minutos.";
+            }
 
             return $"El código expirará en {_verificationCodeExpiry} minutos. Puedes solicitar un nuevo código después de {_waitingTimeInMinutesAfterResendEmail} minutos.";
         }

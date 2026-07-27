@@ -39,5 +39,13 @@ namespace TiendaUCN.src.API.Controllers
             var message = await _brandService.DeleteBrandAsync(id);
             return Ok(new GenericResponse<string>(message, null));
         }
+
+        [HttpGet]
+        [AllowAnonymous]
+        public async Task<IActionResult> GetAllActiveBrands()
+        {
+            var result = await _brandService.GetAllActiveBrandsAsync();
+            return Ok(new GenericResponse<List<CatalogItemDTO>>("Marcas encontradas exitosamente", result));
+        }
     }
 }
