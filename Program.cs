@@ -131,7 +131,8 @@ builder.Services.AddCors(options =>
     options.AddPolicy("AllowNextJs",
     policy => policy.WithOrigins("http://localhost:3000", "http://localhost:3001") //Puertos del frontend
     .AllowAnyMethod() //Permite cualquier tipo de solicitud (GET, POST, PUT, DELETE, etc.)
-    .AllowAnyHeader()); //Permite cualquier tipo de encabezado
+    .AllowAnyHeader()
+    .AllowCredentials()); //Necesario para que el navegador envíe/reciba la cookie del carrito
 
 });
 
