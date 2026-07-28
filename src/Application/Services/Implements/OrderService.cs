@@ -190,10 +190,20 @@ namespace TiendaUCN.src.Application.Services.Implements
             // Obtener las orders filtrados y el total de orders que cumplen con el filtro
             var (orders, totalCount) = await _orderRepository.GetFilteredForUserIdAsync(searchParams, userId);
 
+            // Un usuario sin pedidos (o sin resultados para el filtro aplicado) es un estado
+            // válido -no un error-, así que retornamos una lista vacía en vez de lanzar una excepción.
             if (totalCount == 0)
             {
-                Log.Information("No se encontraron productos que cumplan con los criterios de busqueda para el customer. Filtros: {@SearchParams}", searchParams);
-                throw new KeyNotFoundException("No se encontraron productos que cumplan con los criterios de busqueda.");
+                Log.Information("El usuario {UserId} no tiene ordenes que cumplan con los criterios de busqueda. Filtros: {@SearchParams}", userId, searchParams);
+                return new ListedOrderDetailDTO
+                {
+                    Orders = new List<OrderDetailDTO>(),
+                    TotalCount = 0,
+                    TotalPages = 0,
+                    CurrentPage = searchParams.PageNumber,
+                    PageSize = searchParams.PageSize,
+                    OrdersInPage = 0
+                };
             }
 
             var totalPages = (int)Math.Ceiling((double)totalCount / searchParams.PageSize);
